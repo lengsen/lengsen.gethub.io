@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Leng&#39;s Blog</title>
   
-  <subtitle>分享一些我做的项目以及实验</subtitle>
+  <subtitle>share</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
