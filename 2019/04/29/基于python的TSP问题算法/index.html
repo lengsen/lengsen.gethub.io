@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="python,">
+  <meta name="keywords" content="python,人工智能,">
 
 
 
@@ -89,7 +89,7 @@
 
 
 <meta name="description" content="基于python用于解决TSP问题的遗传算法一、实验目的 掌握遗传算法在实际问题中的应用方法 理解遗传算法中染色体编码和适应度函数的定义方法 熟悉遗传算法中选择、交叉、变异操作在实际问题中的设计方法 熟悉遗传算法中的控制参数设置对性能的影响 二、实验原理1.旅行商问题旅行商问题也叫旅行推销员问题（Travelling salesman problem, TSP）：假设有一个旅行商人要拜访">
-<meta name="keywords" content="python">
+<meta name="keywords" content="python,人工智能">
 <meta property="og:type" content="article">
 <meta property="og:title" content="基于python用于解决TSP问题的遗传算法
 ">
@@ -97,11 +97,14 @@
 <meta property="og:site_name" content="Leng&#39;s Blog">
 <meta property="og:description" content="基于python用于解决TSP问题的遗传算法一、实验目的 掌握遗传算法在实际问题中的应用方法 理解遗传算法中染色体编码和适应度函数的定义方法 熟悉遗传算法中选择、交叉、变异操作在实际问题中的设计方法 熟悉遗传算法中的控制参数设置对性能的影响 二、实验原理1.旅行商问题旅行商问题也叫旅行推销员问题（Travelling salesman problem, TSP）：假设有一个旅行商人要拜访">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-05T00:51:35.205Z">
+<meta property="og:image" content="http://yoursite.com/picture/tsp/harbin000.PNG">
+<meta property="og:image" content="http://yoursite.com/picture/tsp/harbin.png">
+<meta property="og:updated_time" content="2019-05-07T06:50:28.863Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于python用于解决TSP问题的遗传算法
 ">
 <meta name="twitter:description" content="基于python用于解决TSP问题的遗传算法一、实验目的 掌握遗传算法在实际问题中的应用方法 理解遗传算法中染色体编码和适应度函数的定义方法 熟悉遗传算法中选择、交叉、变异操作在实际问题中的设计方法 熟悉遗传算法中的控制参数设置对性能的影响 二、实验原理1.旅行商问题旅行商问题也叫旅行推销员问题（Travelling salesman problem, TSP）：假设有一个旅行商人要拜访">
+<meta name="twitter:image" content="http://yoursite.com/picture/tsp/harbin000.PNG">
 
 
 
@@ -602,7 +605,8 @@ plt.pause(5)
 plt.savefig(&apos;ditu.png&apos;)
 
 plt.close() 
-</code></pre><h2 id="实验遇到的问题"><a href="#实验遇到的问题" class="headerlink" title="实验遇到的问题"></a>实验遇到的问题</h2><h3 id="1-输出的图像上的汉字显示为方框，这是因为不支持编码导致的"><a href="#1-输出的图像上的汉字显示为方框，这是因为不支持编码导致的" class="headerlink" title="1.输出的图像上的汉字显示为方框，这是因为不支持编码导致的"></a>1.输出的图像上的汉字显示为方框，这是因为不支持编码导致的</h3><p>添加如下函数后问题得到了解决：<br>    plt.rcParams[‘font.sans-serif’]=[‘SimHei’]<br>    plt.rcParams[‘axes.unicode_minus’] =False #减号unicode编码</p>
+</code></pre><h3 id="运行效果图"><a href="#运行效果图" class="headerlink" title="运行效果图"></a>运行效果图</h3><p><img src="/picture/tsp/harbin000.PNG" alt><br><img src="/picture/tsp/harbin.png" alt></p>
+<h2 id="实验遇到的问题"><a href="#实验遇到的问题" class="headerlink" title="实验遇到的问题"></a>实验遇到的问题</h2><h3 id="1-输出的图像上的汉字显示为方框，这是因为不支持编码导致的"><a href="#1-输出的图像上的汉字显示为方框，这是因为不支持编码导致的" class="headerlink" title="1.输出的图像上的汉字显示为方框，这是因为不支持编码导致的"></a>1.输出的图像上的汉字显示为方框，这是因为不支持编码导致的</h3><p>添加如下函数后问题得到了解决：<br>    plt.rcParams[‘font.sans-serif’]=[‘SimHei’]<br>    plt.rcParams[‘axes.unicode_minus’] =False #减号unicode编码</p>
 <h3 id="2-在对有些list进行更改的时候，不想改变原始的值，但是python的等于号直接将地址赋值过来了这个之前是不太了解的（这是第一次使用python进行编程，很多的地方不熟悉）"><a href="#2-在对有些list进行更改的时候，不想改变原始的值，但是python的等于号直接将地址赋值过来了这个之前是不太了解的（这是第一次使用python进行编程，很多的地方不熟悉）" class="headerlink" title="2.在对有些list进行更改的时候，不想改变原始的值，但是python的等于号直接将地址赋值过来了这个之前是不太了解的（这是第一次使用python进行编程，很多的地方不熟悉）"></a>2.在对有些list进行更改的时候，不想改变原始的值，但是python的等于号直接将地址赋值过来了这个之前是不太了解的（这是第一次使用python进行编程，很多的地方不熟悉）</h3><p>使用.copy()方法，解决了我这个想要使用却又不想改变原始值的要求</p>
 <h3 id="所给的data-txt文件如下"><a href="#所给的data-txt文件如下" class="headerlink" title="所给的data.txt文件如下"></a>所给的data.txt文件如下</h3><pre><code>北京,116.46,39.92
 天津,117.2,39.13
@@ -685,6 +689,8 @@ plt.close()
           
             <a href="/tags/python/" rel="tag"><i class="fa fa-tag"></i>python</a>
           
+            <a href="/tags/人工智能/" rel="tag"><i class="fa fa-tag"></i>人工智能</a>
+          
         </div>
       
 
@@ -705,6 +711,10 @@ plt.close()
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/06/堆溢出入门/" rel="prev" title="堆溢出的简单入门">
+                堆溢出的简单入门 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -781,7 +791,7 @@ plt.close()
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -794,7 +804,7 @@ plt.close()
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -834,7 +844,7 @@ plt.close()
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基于python用于解决TSP问题的遗传算法"><span class="nav-number">1.</span> <span class="nav-text">基于python用于解决TSP问题的遗传算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、实验目的"><span class="nav-number">1.1.</span> <span class="nav-text">一、实验目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、实验原理"><span class="nav-number">1.2.</span> <span class="nav-text">二、实验原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-旅行商问题"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.旅行商问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-遗传算法"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.遗传算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、实验步骤（简要的说明我写的主要的算法）"><span class="nav-number">1.3.</span> <span class="nav-text">三、实验步骤（简要的说明我写的主要的算法）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-将所需遍历的城市从文件中读取出来，并确定出发位置"><span class="nav-number">1.3.1.</span> <span class="nav-text">1.将所需遍历的城市从文件中读取出来，并确定出发位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-根据传入的城市编写距离矩阵，矩阵的参数为计算出的每个城市之间的距离"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.根据传入的城市编写距离矩阵，矩阵的参数为计算出的每个城市之间的距离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-产生初代种群"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.产生初代种群</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-对种群进行自然选择（物竞天择）"><span class="nav-number">1.3.4.</span> <span class="nav-text">4.对种群进行自然选择（物竞天择）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-画出连接各个点的的折线图"><span class="nav-number">1.3.5.</span> <span class="nav-text">5.画出连接各个点的的折线图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、实验代码"><span class="nav-number">1.4.</span> <span class="nav-text">四、实验代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验遇到的问题"><span class="nav-number">1.5.</span> <span class="nav-text">实验遇到的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-输出的图像上的汉字显示为方框，这是因为不支持编码导致的"><span class="nav-number">1.5.1.</span> <span class="nav-text">1.输出的图像上的汉字显示为方框，这是因为不支持编码导致的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-在对有些list进行更改的时候，不想改变原始的值，但是python的等于号直接将地址赋值过来了这个之前是不太了解的（这是第一次使用python进行编程，很多的地方不熟悉）"><span class="nav-number">1.5.2.</span> <span class="nav-text">2.在对有些list进行更改的时候，不想改变原始的值，但是python的等于号直接将地址赋值过来了这个之前是不太了解的（这是第一次使用python进行编程，很多的地方不熟悉）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#所给的data-txt文件如下"><span class="nav-number">1.5.3.</span> <span class="nav-text">所给的data.txt文件如下</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基于python用于解决TSP问题的遗传算法"><span class="nav-number">1.</span> <span class="nav-text">基于python用于解决TSP问题的遗传算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、实验目的"><span class="nav-number">1.1.</span> <span class="nav-text">一、实验目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、实验原理"><span class="nav-number">1.2.</span> <span class="nav-text">二、实验原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-旅行商问题"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.旅行商问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-遗传算法"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.遗传算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、实验步骤（简要的说明我写的主要的算法）"><span class="nav-number">1.3.</span> <span class="nav-text">三、实验步骤（简要的说明我写的主要的算法）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-将所需遍历的城市从文件中读取出来，并确定出发位置"><span class="nav-number">1.3.1.</span> <span class="nav-text">1.将所需遍历的城市从文件中读取出来，并确定出发位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-根据传入的城市编写距离矩阵，矩阵的参数为计算出的每个城市之间的距离"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.根据传入的城市编写距离矩阵，矩阵的参数为计算出的每个城市之间的距离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-产生初代种群"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.产生初代种群</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-对种群进行自然选择（物竞天择）"><span class="nav-number">1.3.4.</span> <span class="nav-text">4.对种群进行自然选择（物竞天择）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-画出连接各个点的的折线图"><span class="nav-number">1.3.5.</span> <span class="nav-text">5.画出连接各个点的的折线图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、实验代码"><span class="nav-number">1.4.</span> <span class="nav-text">四、实验代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#运行效果图"><span class="nav-number">1.4.1.</span> <span class="nav-text">运行效果图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验遇到的问题"><span class="nav-number">1.5.</span> <span class="nav-text">实验遇到的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-输出的图像上的汉字显示为方框，这是因为不支持编码导致的"><span class="nav-number">1.5.1.</span> <span class="nav-text">1.输出的图像上的汉字显示为方框，这是因为不支持编码导致的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-在对有些list进行更改的时候，不想改变原始的值，但是python的等于号直接将地址赋值过来了这个之前是不太了解的（这是第一次使用python进行编程，很多的地方不熟悉）"><span class="nav-number">1.5.2.</span> <span class="nav-text">2.在对有些list进行更改的时候，不想改变原始的值，但是python的等于号直接将地址赋值过来了这个之前是不太了解的（这是第一次使用python进行编程，很多的地方不熟悉）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#所给的data-txt文件如下"><span class="nav-number">1.5.3.</span> <span class="nav-text">所给的data.txt文件如下</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="cryptology,">
+  <meta name="keywords" content="堆溢出,">
 
 
 
@@ -88,18 +88,18 @@
 
 
 
-<meta name="description" content="实验一：Convert hex to base64 （编程将十六进制的字符串转换成base64编码）：编程将如下的十六进制字符串:49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d 转换成如下的base64编码的字符串:SSdtIGtpbGxpbmcgeW9">
-<meta name="keywords" content="cryptology">
+<meta name="description" content="堆溢出的简单入门堆与栈的区别栈是具有硬件直接支持的栈存储数据 + 控制流信息堆是由操作系统的库函数予以支持的堆存储数据 堆的创建和维护：通过malloc实现什么是堆当使用malloc函数第一次向系统申请小于128kb的内存时，会通过sys_brk申请132kb的内存，这块内存就称为堆 堆的结构prev_size: 如果当前chunk的相邻前一chunk未被使用，prev_size为此前一chunk">
+<meta name="keywords" content="堆溢出">
 <meta property="og:type" content="article">
-<meta property="og:title" content="密码学实验1_Convert hex to base64 ">
-<meta property="og:url" content="http://yoursite.com/2019/03/29/密码学实验1-Convert-hex-to-base64/index.html">
+<meta property="og:title" content="堆溢出的简单入门">
+<meta property="og:url" content="http://yoursite.com/2019/05/06/堆溢出入门/index.html">
 <meta property="og:site_name" content="Leng&#39;s Blog">
-<meta property="og:description" content="实验一：Convert hex to base64 （编程将十六进制的字符串转换成base64编码）：编程将如下的十六进制字符串:49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d 转换成如下的base64编码的字符串:SSdtIGtpbGxpbmcgeW9">
+<meta property="og:description" content="堆溢出的简单入门堆与栈的区别栈是具有硬件直接支持的栈存储数据 + 控制流信息堆是由操作系统的库函数予以支持的堆存储数据 堆的创建和维护：通过malloc实现什么是堆当使用malloc函数第一次向系统申请小于128kb的内存时，会通过sys_brk申请132kb的内存，这块内存就称为堆 堆的结构prev_size: 如果当前chunk的相邻前一chunk未被使用，prev_size为此前一chunk">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-30T07:22:05.227Z">
+<meta property="og:updated_time" content="2019-05-07T06:19:16.417Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="密码学实验1_Convert hex to base64 ">
-<meta name="twitter:description" content="实验一：Convert hex to base64 （编程将十六进制的字符串转换成base64编码）：编程将如下的十六进制字符串:49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d 转换成如下的base64编码的字符串:SSdtIGtpbGxpbmcgeW9">
+<meta name="twitter:title" content="堆溢出的简单入门">
+<meta name="twitter:description" content="堆溢出的简单入门堆与栈的区别栈是具有硬件直接支持的栈存储数据 + 控制流信息堆是由操作系统的库函数予以支持的堆存储数据 堆的创建和维护：通过malloc实现什么是堆当使用malloc函数第一次向系统申请小于128kb的内存时，会通过sys_brk申请132kb的内存，这块内存就称为堆 堆的结构prev_size: 如果当前chunk的相邻前一chunk未被使用，prev_size为此前一chunk">
 
 
 
@@ -129,13 +129,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/03/29/密码学实验1-Convert-hex-to-base64/">
+  <link rel="canonical" href="http://yoursite.com/2019/05/06/堆溢出入门/">
 
 
 
 
 
-  <title>密码学实验1_Convert hex to base64  | Leng's Blog</title>
+  <title>堆溢出的简单入门 | Leng's Blog</title>
   
 
 
@@ -284,7 +284,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/29/密码学实验1-Convert-hex-to-base64/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/06/堆溢出入门/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Leng">
@@ -301,7 +301,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">密码学实验1_Convert hex to base64 </h1>
+          <h1 class="post-title" itemprop="name headline">堆溢出的简单入门</h1>
         
 
         <div class="post-meta">
@@ -313,8 +313,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-29T20:48:55+08:00">
-                2019-03-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-06T22:29:08+08:00">
+                2019-05-06
               </time>
             
 
@@ -351,83 +351,21 @@
       
 
       
-        <h1 id="实验一：Convert-hex-to-base64-（编程将十六进制的字符串转换成base64编码）："><a href="#实验一：Convert-hex-to-base64-（编程将十六进制的字符串转换成base64编码）：" class="headerlink" title="实验一：Convert hex to base64 （编程将十六进制的字符串转换成base64编码）："></a>实验一：Convert hex to base64 （编程将十六进制的字符串转换成base64编码）：</h1><h3 id="编程将如下的十六进制字符串"><a href="#编程将如下的十六进制字符串" class="headerlink" title="编程将如下的十六进制字符串:"></a>编程将如下的十六进制字符串:</h3><pre><code>49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d
-</code></pre><h3 id="转换成如下的base64编码的字符串"><a href="#转换成如下的base64编码的字符串" class="headerlink" title="转换成如下的base64编码的字符串:"></a>转换成如下的base64编码的字符串:</h3><pre><code>SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t
-</code></pre><p>###实验原理或者解题思路方法：<br>　　首先将十六进制数转换为二进制，然后将二进制数每六位一组，转换成十进制数，将十进制数利用ASCII分别与base64的字符对应，最后输出结果</p>
-<h3 id="实现代码如下："><a href="#实现代码如下：" class="headerlink" title="实现代码如下："></a>实现代码如下：</h3><pre><code>#include&lt;stdio.h&gt;
-char *ssd(char s[],int l,int y);//将十六进制 转换为二进制
-void ttob(char b[],int v);//二进制转换为base64并输出 
-int main()
-{
-    char a[]={&quot;49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d&quot;};
-    int size=sizeof(a)-1;//判断多少位十六进制数 
-    char *m;
-    m=ssd(a,size,1);
-    ttob(m,4*size);
-} 
-char *ssd(char s[],int l,int y)//将十六进制 转换为二进制
-{ 
-int e;
-    char aaa[100];
-    //将十六进制数利用SCII分别与十进制整数对应并存储到数组中 
-     for(e=0;e&lt;l;e++)
-     {
-      if(s[e]&lt;=&apos;f&apos;&amp;&amp;s[e]&gt;=&apos;a&apos;)
-      aaa[e]=int(s[e])-87;
-      else
-      aaa[e]=int(s[e])-48;
-     }
-     char ss[3][1000];
-     //十六进制的组合从0到e 
-    char as[]={0,0,0,0,0,0,0,1,0,0,1,0,0,0,1,1,0,1,0,0,0,1,0,1,0,1,1,0,0,1,1,1,1,0,0,0,1,0,0,1,1,0,1,0,1,0,1,1,1,1,0,0,1,1,0,1,1,1,1,0,1,1,1,1};
-     int x=0,v=0,k;
-     //将十进制数转换为二进制存入数组中 
-     do{
-       k=0;
-       while(k&lt;4)
-       {
-       int c;
-       c=4*aaa[x]+k;
-       ss[y][v++]=as[c];
-       k++;
-         }
-         x++; 
-     }while(x&lt;l);
-     return ss[y];
-}
-void ttob(char b[],int v)//二进制转换为base64并输出 
-{
-   int i=0,n=0,q=0;
-   char s[100];
-   //将二进制每六位一组转换成十进制数 
-   while(1){
-       n=2*n+b[i++];
-       if(i%6==0||i==v)
-       {
-           s[q++]=n;
-           n=0;
-           if(i==v)
-           break;
-         }
-     }
-     printf(&quot;十六进制数转换成base64为：\n&quot;); 
-     //将十进制数利用ASCII分别与base64的字符对应，然后输出 
-     for(i=0;i&lt;q;i++)
-     {
-        if(s[i]&lt;=25&amp;&amp;s[i]&gt;=0)
-            printf(&quot;%c&quot;,s[i]+65);
-        else if(s[i]&gt;=26&amp;&amp;s[i]&lt;=51)
-            printf(&quot;%c&quot;,s[i]+71);
-        else if(s[i]&gt;=52&amp;&amp;s[i]&lt;=61)
-            printf(&quot;%c&quot;,s[i]-4);
-        else if(s[i]==62)
-            printf(&quot;%c&quot;,s[i]-19);
-        else
-            printf(&quot;%c&quot;,s[i]-16);
-     }
+        <h1 id="堆溢出的简单入门"><a href="#堆溢出的简单入门" class="headerlink" title="堆溢出的简单入门"></a>堆溢出的简单入门</h1><h2 id="堆与栈的区别"><a href="#堆与栈的区别" class="headerlink" title="堆与栈的区别"></a>堆与栈的区别</h2><p>栈是具有硬件直接支持的<br>栈存储数据 + 控制流信息<br>堆是由操作系统的库函数予以支持的<br>堆存储数据</p>
+<h2 id="堆的创建和维护：通过malloc实现"><a href="#堆的创建和维护：通过malloc实现" class="headerlink" title="堆的创建和维护：通过malloc实现"></a>堆的创建和维护：通过malloc实现</h2><h2 id="什么是堆"><a href="#什么是堆" class="headerlink" title="什么是堆"></a>什么是堆</h2><p>当使用malloc函数第一次向系统申请小于128kb的内存时，会通过sys_brk申请132kb的内存，这块内存就称为堆</p>
+<h2 id="堆的结构"><a href="#堆的结构" class="headerlink" title="堆的结构"></a>堆的结构</h2><p>prev_size: 如果当前chunk的相邻前一chunk未被使用，prev_size为此前一chunk的大小<br>size: 当前chunk的大小。由于chunk大小是8的整数倍，所以此size的后3 bit被用于存储其他信息。我们需要记住的便是最低bit，即图中P的位置，用于指示前一chunk是否已被使用(PREV_INUSE)。</p>
+<p>如果当前chunk处于未被使用状态，则mem前8 bytes被用来存储其他信息，具体如下：<br>fd: 下一个未被使用的chunk的地址<br>bk: 上一个未被使用的chunk的地址</p>
+<h2 id="堆的工作原理"><a href="#堆的工作原理" class="headerlink" title="堆的工作原理"></a>堆的工作原理</h2><p>1、系统创建进程<br>2、进程运行在栈上，数据段上是空的<br>3、malloc创建了堆</p>
+<h2 id="什么是bin"><a href="#什么是bin" class="headerlink" title="什么是bin"></a>什么是bin</h2><p>bin是记录free chunk的链表数据结构，在glibc中可分为：<br>fastbinsY，一个用于记录所有fastbins的数组，size为16-80字节<br>bins，也是一个数组，记录除fast bins之外的所有bins；其中bin 1 unsorted bin，bin 2 到63为small bin，bin 64到126为large bin</p>
+<h2 id="bins"><a href="#bins" class="headerlink" title="bins"></a>bins</h2><p>chunk头中包含的大小信息，主要用来在获取内存中相邻chunk的地址（当前chunk地址减去前一chunk的大小，为前一chunk的地址；当前chunk地址加上当前chunk的大小，为后一chunk的地址）。而mem中的fd和bk只在当前chunk处于未被使用时才有意义，因为当我使用了此chunk后mem里的空间被用来存储数据。<br>通过这些未被使用的fd、bk chunk组成了一张链表。通常差不大小的chunk会被放在一起组成一张链表，其被称为bin。bin的集合被malloc合并，被称为bins</p>
+<h2 id="fastbinn"><a href="#fastbinn" class="headerlink" title="fastbinn"></a>fastbinn</h2><p>fastbin维护一大堆的链表，当申请较小内存空间时它们会被从fastbin中剪除，并返回此地址。<br>在free时，为了快速回收这些空间，将不通过bk仅由fd将chunk插进fastbin。并且其满足后进先出的原理<br>由于fastbin没有bk，是一个单向链表，因此可能会触发任意写的问题。<br>fastbin中的东西实际上是通过在内存上连续排布来实现的。当堆栈顶部的chunk被出栈以后实际上fastbin会指向次chunk的上一个。<br>此过程是通过fastbin中此大小的指针指向chunk的fd来实现的。所以如果fd被通过某种技术覆写，那么malloc就会返回被覆写入的地址。如果mem被丢入一个十分大的数据就会把下面的覆写了，这会导致再进行两次malloc就会返回你所定义的伪chunk中的内容。<br>这个伪chunk会指向你需要的任意地方，利用这种指针可以触发任意写</p>
+<h2 id="顶块（top-chunk）的作用：救火队员"><a href="#顶块（top-chunk）的作用：救火队员" class="headerlink" title="顶块（top chunk）的作用：救火队员"></a>顶块（top chunk）的作用：救火队员</h2><p>不属于任何bin<br>当前所有空闲块(无论那种bin)全都尺寸不合时，由顶块应急<br>顶块比请求尺寸大 — 分割供给使用，剩余部分为新顶块<br>顶块比请求尺寸小 — 全堆无适合块，扩展堆/分配新堆</p>
+<p>##与栈溢出的区别：<br>溢出方向 == 堆增长方向<br>首先破坏（虚拟地址意义上的）下一个堆块的构造</p>
+<h2 id="Linux上的典型堆溢出利用方式："><a href="#Linux上的典型堆溢出利用方式：" class="headerlink" title="Linux上的典型堆溢出利用方式："></a>Linux上的典型堆溢出利用方式：</h2><p>攻击fastbin<br>攻击unlink</p>
+<h2 id="Windows堆溢出攻击的主要形式"><a href="#Windows堆溢出攻击的主要形式" class="headerlink" title="Windows堆溢出攻击的主要形式"></a>Windows堆溢出攻击的主要形式</h2><p>利用向量化异常处理（VEH）<br>利用系统默认异常处理函数（UEF）<br>Heap spray<br>Bitmap Flipping攻击<br>Bitmap XOR攻击<br>Heap Cache攻击</p>
+<h2 id="堆溢出的防御"><a href="#堆溢出的防御" class="headerlink" title="堆溢出的防御"></a>堆溢出的防御</h2><h3 id="相比栈溢出，针对堆溢出的防御措施更易实用化"><a href="#相比栈溢出，针对堆溢出的防御措施更易实用化" class="headerlink" title="相比栈溢出，针对堆溢出的防御措施更易实用化"></a>相比栈溢出，针对堆溢出的防御措施更易实用化</h3><p>堆依靠系统库实现其维护，故堆保护 == 系统库升级</p>
+<h3 id="针对unlink的保护："><a href="#针对unlink的保护：" class="headerlink" title="针对unlink的保护："></a>针对unlink的保护：</h3><p>·Double Free检测:该机制不允许释放已经处于free状态的chunk。因此，当攻击者将second chunk的size设置为-4的时候，就意味着该size的PREV_INUSE位为0，也就是说second chunk之前的first chunk(我们需要free的chunk)已经处于free状态，那么再free就报出double free错误<br>·next size非法检测: 检测next size是否在8到当前arena的整个系统内存大小之间。因此当检测到next size为-4的时候，就会报出invalid next size错误<br>·双链表冲突检测:执行unlink操作的时候检测链表中前一个chunk的fd与后一个chunk的bk是否都指向当前需要unlink的chunk</p>
 
-}
-</code></pre><h3 id="运行结果略"><a href="#运行结果略" class="headerlink" title="运行结果略"></a>运行结果略</h3>
       
     </div>
     
@@ -456,7 +394,7 @@ void ttob(char b[],int v)//二进制转换为base64并输出
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://yoursite.com/2019/03/29/密码学实验1-Convert-hex-to-base64/" title="密码学实验1_Convert hex to base64 ">http://yoursite.com/2019/03/29/密码学实验1-Convert-hex-to-base64/</a>
+    <a href="http://yoursite.com/2019/05/06/堆溢出入门/" title="堆溢出的简单入门">http://yoursite.com/2019/05/06/堆溢出入门/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -471,7 +409,7 @@ void ttob(char b[],int v)//二进制转换为base64并输出
       
         <div class="post-tags">
           
-            <a href="/tags/cryptology/" rel="tag"><i class="fa fa-tag"></i>cryptology</a>
+            <a href="/tags/堆溢出/" rel="tag"><i class="fa fa-tag"></i>堆溢出</a>
           
         </div>
       
@@ -484,8 +422,10 @@ void ttob(char b[],int v)//二进制转换为base64并输出
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/03/29/My-first-Post/" rel="next" title="My first Post">
-                <i class="fa fa-chevron-left"></i> My first Post
+              <a href="/2019/04/29/基于python的TSP问题算法/" rel="next" title="基于python用于解决TSP问题的遗传算法
+">
+                <i class="fa fa-chevron-left"></i> 基于python用于解决TSP问题的遗传算法
+
               </a>
             
           </div>
@@ -494,8 +434,8 @@ void ttob(char b[],int v)//二进制转换为base64并输出
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/03/29/密码学实验2—-Fixed-XORR/" rel="prev" title="密码学实验2_Fixed XORR">
-                密码学实验2_Fixed XORR <i class="fa fa-chevron-right"></i>
+              <a href="/2019/05/06/how2heap学习笔记/" rel="prev" title="how2heap学习笔记（一）">
+                how2heap学习笔记（一） <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -626,7 +566,7 @@ void ttob(char b[],int v)//二进制转换为base64并输出
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#实验一：Convert-hex-to-base64-（编程将十六进制的字符串转换成base64编码）："><span class="nav-number">1.</span> <span class="nav-text">实验一：Convert hex to base64 （编程将十六进制的字符串转换成base64编码）：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#编程将如下的十六进制字符串"><span class="nav-number">1.0.1.</span> <span class="nav-text">编程将如下的十六进制字符串:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转换成如下的base64编码的字符串"><span class="nav-number">1.0.2.</span> <span class="nav-text">转换成如下的base64编码的字符串:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现代码如下："><span class="nav-number">1.0.3.</span> <span class="nav-text">实现代码如下：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行结果略"><span class="nav-number">1.0.4.</span> <span class="nav-text">运行结果略</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#堆溢出的简单入门"><span class="nav-number">1.</span> <span class="nav-text">堆溢出的简单入门</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#堆与栈的区别"><span class="nav-number">1.1.</span> <span class="nav-text">堆与栈的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#堆的创建和维护：通过malloc实现"><span class="nav-number">1.2.</span> <span class="nav-text">堆的创建和维护：通过malloc实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是堆"><span class="nav-number">1.3.</span> <span class="nav-text">什么是堆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#堆的结构"><span class="nav-number">1.4.</span> <span class="nav-text">堆的结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#堆的工作原理"><span class="nav-number">1.5.</span> <span class="nav-text">堆的工作原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是bin"><span class="nav-number">1.6.</span> <span class="nav-text">什么是bin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bins"><span class="nav-number">1.7.</span> <span class="nav-text">bins</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fastbinn"><span class="nav-number">1.8.</span> <span class="nav-text">fastbinn</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#顶块（top-chunk）的作用：救火队员"><span class="nav-number">1.9.</span> <span class="nav-text">顶块（top chunk）的作用：救火队员</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux上的典型堆溢出利用方式："><span class="nav-number">1.10.</span> <span class="nav-text">Linux上的典型堆溢出利用方式：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Windows堆溢出攻击的主要形式"><span class="nav-number">1.11.</span> <span class="nav-text">Windows堆溢出攻击的主要形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#堆溢出的防御"><span class="nav-number">1.12.</span> <span class="nav-text">堆溢出的防御</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#相比栈溢出，针对堆溢出的防御措施更易实用化"><span class="nav-number">1.12.1.</span> <span class="nav-text">相比栈溢出，针对堆溢出的防御措施更易实用化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#针对unlink的保护："><span class="nav-number">1.12.2.</span> <span class="nav-text">针对unlink的保护：</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
