@@ -98,7 +98,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/picture/tsp/一次gui.PNG">
 <meta property="og:image" content="http://yoursite.com/picture/tsp/二代gui.PNG">
-<meta property="og:updated_time" content="2019-05-07T06:45:05.196Z">
+<meta property="og:updated_time" content="2019-05-09T16:24:25.123Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="带GUI的TSP算法">
 <meta name="twitter:description" content="对上一个TSP算法的优化以及GUI的设计我使用python的tkinter库进行GUI的设计详细请看实验代码实验代码：import tkinter as tk from tkinter import * import random import math import matplotlib.pyplot as plt import numpy as np import time #这两行代码让输出">
@@ -369,7 +369,7 @@ def initCities(main_cities):
     cities = []
     firstCity=main_cities[0]
     n=0
-    file=open(&quot;F:\\学习\大三下\\人工智能\\实验一\\data.txt&quot;,&quot;r&quot;)
+    file=open(&quot;data.txt&quot;,&quot;r&quot;)
     for line in file:
         line = line.replace(&quot;,\n&quot;,&quot; &quot;)
         line = line.split(&quot;,&quot;)
@@ -707,14 +707,48 @@ def runAll():
             #显示1秒
             plt.pause(1)
             #保存图象
-            plt.savefig(&quot;F:\学习\大三下\人工智能\demo\demo%d.png&quot;%n)
-            textOut.insert(INSERT,&quot;图片存储位置为：&quot;+&quot;F:\学习\大三下\人工智能\demo\demo%d.png&quot;%n+&quot;\n\n&quot;)
+            plt.savefig(&quot;demo%d.png&quot;%n)
+            textOut.insert(INSERT,&quot;图片存储位置为：&quot;+&quot;demo%d.png&quot;%n+&quot;\n\n&quot;)
             plt.close() 
 but=tk.Button(windows,text=&quot;运行&quot;,width=8,height=3,command=runAll)
 but.place(x=250,y=80)
 windows.mainloop()
 </code></pre><h3 id="运行效果图："><a href="#运行效果图：" class="headerlink" title="运行效果图："></a>运行效果图：</h3><p><img src="/picture/tsp/一次gui.PNG" alt><br><img src="/picture/tsp/二代gui.PNG" alt></p>
-
+<h3 id="所给的data-txt文件如下"><a href="#所给的data-txt文件如下" class="headerlink" title="所给的data.txt文件如下"></a>所给的data.txt文件如下</h3><pre><code>北京,116.46,39.92
+天津,117.2,39.13
+上海,121.48,31.22
+重庆,106.54,29.59
+拉萨,91.11,29.97
+乌鲁木齐,87.68,43.77
+银川,106.27,38.47
+呼和浩特,111.65,40.82
+南宁,108.33,22.84
+哈尔滨,126.63,45.75
+长春,125.35,43.88
+沈阳,123.38,41.8
+石家庄,114.48,38.03
+太原,112.53,37.87
+西宁,101.74,36.56
+济南,117,36.65
+郑州,113.6,34.76
+南京,118.78,32.04
+合肥,117.27,31.86
+杭州,120.19,30.26
+福州,119.3,26.08
+南昌,115.89,28.68
+长沙,113,28.21
+武汉,114.31,30.52
+广州,113.23,23.16
+台北,121.5,25.05
+海口,110.35,20.02
+兰州,103.73,36.03
+西安,108.95,34.27
+成都,104.06,30.67
+贵阳,106.71,26.57
+昆明,102.73,25.04
+香港,114.1,22.2
+澳门,113.33,22.13
+</code></pre>
       
     </div>
     
@@ -911,7 +945,7 @@ windows.mainloop()
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#对上一个TSP算法的优化以及GUI的设计"><span class="nav-number">1.</span> <span class="nav-text">对上一个TSP算法的优化以及GUI的设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#我使用python的tkinter库进行GUI的设计详细请看实验代码"><span class="nav-number">1.1.</span> <span class="nav-text">我使用python的tkinter库进行GUI的设计详细请看实验代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验代码："><span class="nav-number">1.2.</span> <span class="nav-text">实验代码：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#运行效果图："><span class="nav-number">1.2.1.</span> <span class="nav-text">运行效果图：</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#对上一个TSP算法的优化以及GUI的设计"><span class="nav-number">1.</span> <span class="nav-text">对上一个TSP算法的优化以及GUI的设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#我使用python的tkinter库进行GUI的设计详细请看实验代码"><span class="nav-number">1.1.</span> <span class="nav-text">我使用python的tkinter库进行GUI的设计详细请看实验代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验代码："><span class="nav-number">1.2.</span> <span class="nav-text">实验代码：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#运行效果图："><span class="nav-number">1.2.1.</span> <span class="nav-text">运行效果图：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#所给的data-txt文件如下"><span class="nav-number">1.2.2.</span> <span class="nav-text">所给的data.txt文件如下</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
