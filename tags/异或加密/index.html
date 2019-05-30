@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="cryptology,">
+  <meta name="keywords" content="Hexo, NexT">
 
 
 
@@ -88,18 +88,16 @@
 
 
 
-<meta name="description" content="Single-byte XOR cipher （一个字符串被单字符加密，请找出该单字符）如下是一个被单字符异或后得到的十六进制的字符串，请找出该单字符（即密钥），并解密该密文。1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736 提示：利用英语字母频率，穷举法 ###实验原理或者解题思路方法：将十六进制转换为二进制">
-<meta name="keywords" content="cryptology">
-<meta property="og:type" content="article">
-<meta property="og:title" content="密码学实验3_Single-byte XOR cipher">
-<meta property="og:url" content="http://yoursite.com/2019/03/29/密码学实验3-Single-byte-XOR-cipher/index.html">
+<meta name="description" content="分享一些我做的项目以及实验">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Leng&#39;s Blog">
+<meta property="og:url" content="http://yoursite.com/tags/异或加密/index.html">
 <meta property="og:site_name" content="Leng&#39;s Blog">
-<meta property="og:description" content="Single-byte XOR cipher （一个字符串被单字符加密，请找出该单字符）如下是一个被单字符异或后得到的十六进制的字符串，请找出该单字符（即密钥），并解密该密文。1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736 提示：利用英语字母频率，穷举法 ###实验原理或者解题思路方法：将十六进制转换为二进制">
+<meta property="og:description" content="分享一些我做的项目以及实验">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-30T07:22:47.847Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="密码学实验3_Single-byte XOR cipher">
-<meta name="twitter:description" content="Single-byte XOR cipher （一个字符串被单字符加密，请找出该单字符）如下是一个被单字符异或后得到的十六进制的字符串，请找出该单字符（即密钥），并解密该密文。1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736 提示：利用英语字母频率，穷举法 ###实验原理或者解题思路方法：将十六进制转换为二进制">
+<meta name="twitter:title" content="Leng&#39;s Blog">
+<meta name="twitter:description" content="分享一些我做的项目以及实验">
 
 
 
@@ -129,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/03/29/密码学实验3-Single-byte-XOR-cipher/">
+  <link rel="canonical" href="http://yoursite.com/tags/异或加密/">
 
 
 
 
 
-  <title>密码学实验3_Single-byte XOR cipher | Leng's Blog</title>
+  <title>标签: 异或加密 | Leng's Blog</title>
   
 
 
@@ -154,7 +152,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left ">
     <div class="headband"></div>
      <a href="https://lengsen.github.io" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; left: 0; transform: scale(-1, 1);" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style></a>
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -270,261 +268,52 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
-    
+  
+  
+  
+  <div class="post-block tag">
 
-  
+    <div id="posts" class="posts-collapse">
+      <div class="collection-title">
+        <h1>异或加密<small>标签</small>
+        </h1>
+      </div>
 
-  
-  
-  
+      
+        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/29/密码学实验3-Single-byte-XOR-cipher/">
+    <header class="post-header">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Leng">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Leng's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
+      <h2 class="post-title">
         
-        
-          <h1 class="post-title" itemprop="name headline">密码学实验3_Single-byte XOR cipher</h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
+            <a class="post-title-link" href="/2019/05/30/异或软件加密程序/" itemprop="url">
               
-                <span class="post-meta-item-text">发表于</span>
+                <span itemprop="name">异或软件加密程序</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-29T21:04:04+08:00">
-                2019-03-29
-              </time>
-            
+            </a>
+        
+      </h2>
 
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <h1 id="Single-byte-XOR-cipher-（一个字符串被单字符加密，请找出该单字符）"><a href="#Single-byte-XOR-cipher-（一个字符串被单字符加密，请找出该单字符）" class="headerlink" title="Single-byte XOR cipher （一个字符串被单字符加密，请找出该单字符）"></a>Single-byte XOR cipher （一个字符串被单字符加密，请找出该单字符）</h1><h3 id="如下是一个被单字符异或后得到的十六进制的字符串，请找出该单字符（即密钥），并解密该密文。"><a href="#如下是一个被单字符异或后得到的十六进制的字符串，请找出该单字符（即密钥），并解密该密文。" class="headerlink" title="如下是一个被单字符异或后得到的十六进制的字符串，请找出该单字符（即密钥），并解密该密文。"></a>如下是一个被单字符异或后得到的十六进制的字符串，请找出该单字符（即密钥），并解密该密文。</h3><pre><code>1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736
-</code></pre><p>提示：利用英语字母频率，穷举法</p>
-<p>###实验原理或者解题思路方法：<br>将十六进制转换为二进制，每八位为一组转换成十进制存到数组中，用双重for循环，将十进制数与0~127进行异或，然后输出字符型。<br>计算的时候先排除不可能出现的字符（例如ASCII值在0到32之间的等等，具体排除范围在代码中会有），排除后在检查空格的数量，因为每段话一定会出现空格，所以明文中空格的数量在3个或者3个以上，输出符合要求的字符串，再进行筛查，会减少很多时间。</p>
-<h3 id="示例代码如下："><a href="#示例代码如下：" class="headerlink" title="示例代码如下："></a>示例代码如下：</h3><pre><code>#include&lt;stdio.h&gt;
-void ssd(char s[],int l);//将十六进制字符串 转换为二进制以及解密 
-int main()
-{
-    char a[]={&quot;1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736&quot;};
-    int s,t;
-    t=sizeof(a)-1;
-    ssd(a,t); 
-} 
-void ssd(char s[],int l)//将十六进制字符串 转换为二进制以及解密 
-{ 
-int e;
-    char aaa[100];
-     for(e=0;e&lt;l;e++)
-     {
-      if(s[e]&lt;=&apos;f&apos;&amp;&amp;s[e]&gt;=&apos;a&apos;)
-      aaa[e]=int(s[e])-87;
-      else
-      aaa[e]=int(s[e])-48; 
-    //   printf(&quot;%d &quot;,aaa[e]);
-     }
-
-    char ss[1000];//二进制字符串
-     char as[]={0,0,0,0,0,0,0,1,0,0,1,0,0,0,1,1,0,1,0,0,0,1,0,1,0,1,1,0,0,1,1,1,1,0,0,0,1,0,0,1,1,0,1,0,1,0,1,1,1,1,0,0,1,1,0,1,1,1,1,0,1,1,1,1};
-     int x=0,v=0,k;
-     do{
-       k=0;
-       while(k&lt;4)
-       {
-       int c;
-       c=4*aaa[x]+k;
-       ss[v++]=as[c];
-    //     printf(&quot;%d&quot;,ss[v-1]);
-       k++;
-         }
-         x++; 
-     }while(x&lt;l);
-     //for(int m=0;m&lt;4*l;m++)
-     //printf(&quot;%d=%d &quot;,m,ss[m]); 
-   int i=0,n=0,q=0;
-   char u[100];
-   //将二进制每8位一组转换成十进制数
-   while(1){
-       n=2*n+ss[i++];
-       if(i%8==0||i==v)
-       {
-           u[q++]=n;
-           n=0;
-           if(i==v)
-           break;
-         }
-     }
-     //异或输出每组解密后结果 (只输出空格数大于3的字符串） 
-        int ww=0;//输出次序
-        printf(&quot;排除不可能字符后字符串中空格数大于三的字符串有：\n\n&quot;); 
-    for(int q=0;q&lt;=126;q++)
-    { 
-        int num=0;
-        for(int p=0;p&lt;l/2;p++)
-        {
-            aaa[p]=q^u[p]; 
-            if((((int)aaa[p])&gt;=0&amp;&amp;((int)aaa[p])&lt;=31)||(((int)aaa[p])&gt;=60&amp;&amp;((int)aaa[p])&lt;=64)||((int)aaa[p])&gt;=123)//进行一轮筛选，将一些不可能是明文字符排除 
-            break;//利用break减少无效的for循环次数
-            if(((int)aaa[p])==32)
-            num++;
-        }
-        if(num&gt;3)
-        {
-            ww++;
-            printf(&quot;%d: 密钥为 %c  明文为：&quot;,ww,q);
-        for(int p=0;p&lt;l/2;p++)
-        {
-            aaa[p]=q^u[p]; 
-            printf(&quot;%c&quot;,aaa[p]);
-        }
-        printf(&quot;\n&quot;);
-        }
-     }
-
-}
-</code></pre><h3 id="运行结果："><a href="#运行结果：" class="headerlink" title="运行结果："></a>运行结果：</h3><pre><code>密钥为 X  明文为： Cooking MC&apos;s like a pound of bacon
-</code></pre>
-      
-    </div>
-    
-    
-    
-    
-    <div>
-     
-       <div>
-    
-        <div style="text-align:center;color: #ccc;font-size:14px;">------ 本文结束------</div>
-    
-</div>
-     
-     </div>
-    
-
-    
-
-    
-      <div>
-        <ul class="post-copyright">
-  <li class="post-copyright-author">
-    <strong>本文作者：</strong>
-    Leng
-  </li>
-  <li class="post-copyright-link">
-    <strong>本文链接：</strong>
-    <a href="http://yoursite.com/2019/03/29/密码学实验3-Single-byte-XOR-cipher/" title="密码学实验3_Single-byte XOR cipher">http://yoursite.com/2019/03/29/密码学实验3-Single-byte-XOR-cipher/</a>
-  </li>
-  <li class="post-copyright-license">
-    <strong>版权声明： </strong>
-    本博客所有文章除特别声明外，均采用 <a href="https://lengsen.github.io/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
-  </li>
-</ul>
-
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated" datetime="2019-05-30T09:43:11+08:00" content="2019-05-30">
+          05-30
+        </time>
       </div>
-    
-  
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/cryptology/" rel="tag"><i class="fa fa-tag"></i>cryptology</a>
-          
-        </div>
-      
 
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2019/03/29/密码学实验2—-Fixed-XORR/" rel="next" title="密码学实验2_Fixed XORR">
-                <i class="fa fa-chevron-left"></i> 密码学实验2_Fixed XORR
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/03/29/密码学实验4-对多字符加密进行解密/" rel="prev" title="密码学实验4_对多字符加密进行解密">
-                密码学实验4_对多字符加密进行解密 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
+    </header>
   </article>
 
 
-
-    <div class="post-spread">
       
     </div>
+
   </div>
+  
+  
+  
+
+  
 
 
           </div>
@@ -532,10 +321,6 @@ int e;
 
 
           
-
-  
-
-
 
         </div>
         
@@ -556,17 +341,8 @@ int e;
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -624,22 +400,6 @@ int e;
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Single-byte-XOR-cipher-（一个字符串被单字符加密，请找出该单字符）"><span class="nav-number">1.</span> <span class="nav-text">Single-byte XOR cipher （一个字符串被单字符加密，请找出该单字符）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如下是一个被单字符异或后得到的十六进制的字符串，请找出该单字符（即密钥），并解密该密文。"><span class="nav-number">1.0.1.</span> <span class="nav-text">如下是一个被单字符异或后得到的十六进制的字符串，请找出该单字符（即密钥），并解密该密文。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#示例代码如下："><span class="nav-number">1.0.2.</span> <span class="nav-text">示例代码如下：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行结果："><span class="nav-number">1.0.3.</span> <span class="nav-text">运行结果：</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -787,10 +547,6 @@ int e;
 
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
 
   
 
