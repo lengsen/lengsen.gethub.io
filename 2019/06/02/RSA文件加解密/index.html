@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="RSA,加密,">
 
 
 
@@ -88,16 +88,23 @@
 
 
 
-<meta name="description" content="分享一些我做的项目以及实验">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Leng&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/archives/2019/03/index.html">
+<meta name="description" content="RSA文件加解密RSA简介RSA加密是一种非对称加密。可以在不直接传递密钥的情况下，完成解密。这能够确保信息的安全性，避免了直接传递密钥所造成的被破解的风险。是由一对密钥来进行加解密的过程，分别称为公钥和私钥。两者之间有数学相关，该加密算法的原理就是对一极大整数做因数分解的困难性来保证安全性。通常个人保存私钥，公钥是公开的（可能同时多人持有）。 实验环境windows10DEV C++ 实验目的通">
+<meta name="keywords" content="RSA,加密">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RSA文件加解密">
+<meta property="og:url" content="http://yoursite.com/2019/06/02/RSA文件加解密/index.html">
 <meta property="og:site_name" content="Leng&#39;s Blog">
-<meta property="og:description" content="分享一些我做的项目以及实验">
+<meta property="og:description" content="RSA文件加解密RSA简介RSA加密是一种非对称加密。可以在不直接传递密钥的情况下，完成解密。这能够确保信息的安全性，避免了直接传递密钥所造成的被破解的风险。是由一对密钥来进行加解密的过程，分别称为公钥和私钥。两者之间有数学相关，该加密算法的原理就是对一极大整数做因数分解的困难性来保证安全性。通常个人保存私钥，公钥是公开的（可能同时多人持有）。 实验环境windows10DEV C++ 实验目的通">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/picture/rsawenj/1.PNG">
+<meta property="og:image" content="http://yoursite.com/picture/rsawenj/2.PNG">
+<meta property="og:image" content="http://yoursite.com/picture/rsawenj/3.PNG">
+<meta property="og:image" content="http://yoursite.com/picture/rsawenj/4.PNG">
+<meta property="og:updated_time" content="2019-06-02T10:49:15.269Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Leng&#39;s Blog">
-<meta name="twitter:description" content="分享一些我做的项目以及实验">
+<meta name="twitter:title" content="RSA文件加解密">
+<meta name="twitter:description" content="RSA文件加解密RSA简介RSA加密是一种非对称加密。可以在不直接传递密钥的情况下，完成解密。这能够确保信息的安全性，避免了直接传递密钥所造成的被破解的风险。是由一对密钥来进行加解密的过程，分别称为公钥和私钥。两者之间有数学相关，该加密算法的原理就是对一极大整数做因数分解的困难性来保证安全性。通常个人保存私钥，公钥是公开的（可能同时多人持有）。 实验环境windows10DEV C++ 实验目的通">
+<meta name="twitter:image" content="http://yoursite.com/picture/rsawenj/1.PNG">
 
 
 
@@ -127,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/2019/03/">
+  <link rel="canonical" href="http://yoursite.com/2019/06/02/RSA文件加解密/">
 
 
 
 
 
-  <title>归档 | Leng's Blog</title>
+  <title>RSA文件加解密 | Leng's Blog</title>
   
 
 
@@ -152,7 +159,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
      <a href="https://lengsen.github.io" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; left: 0; transform: scale(-1, 1);" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style></a>
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -268,212 +275,327 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/02/RSA文件加解密/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Leng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Leng's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">RSA文件加解密</h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-02T18:35:16+08:00">
+                2019-06-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-        嗯..! 目前共计 13 篇日志。 继续努力。
-      </span>
 
-      
-
-        
-        
-        
-
-        
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2019">2019</h1>
-          </div>
-        
-        
+            
+          
 
-        
+          
+          
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/03/29/密码学实验4-对多字符加密进行解密/" itemprop="url">
-              
-                <span itemprop="name">密码学实验4_对多字符加密进行解密</span>
-              
-            </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-03-29T21:04:45+08:00" content="2019-03-29">
-          03-29
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+        </div>
+      </header>
+    
 
-
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/03/29/密码学实验3-Single-byte-XOR-cipher/" itemprop="url">
-              
-                <span itemprop="name">密码学实验3_Single-byte XOR cipher</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-03-29T21:04:04+08:00" content="2019-03-29">
-          03-29
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
+      
+        <h1 id="RSA文件加解密"><a href="#RSA文件加解密" class="headerlink" title="RSA文件加解密"></a>RSA文件加解密</h1><h2 id="RSA简介"><a href="#RSA简介" class="headerlink" title="RSA简介"></a>RSA简介</h2><p>RSA加密是一种非对称加密。可以在不直接传递密钥的情况下，完成解密。这能够确保信息的安全性，避免了直接传递密钥所造成的被破解的风险。是由一对密钥来进行加解密的过程，分别称为公钥和私钥。两者之间有数学相关，该加密算法的原理就是对一极大整数做因数分解的困难性来保证安全性。通常个人保存私钥，公钥是公开的（可能同时多人持有）。</p>
+<h2 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h2><p>windows10<br>DEV C++</p>
+<h2 id="实验目的"><a href="#实验目的" class="headerlink" title="实验目的"></a>实验目的</h2><p>通过RSA对文件进行加解密</p>
+<h2 id="实验步骤分析"><a href="#实验步骤分析" class="headerlink" title="实验步骤分析"></a>实验步骤分析</h2><h3 id="RSA原理："><a href="#RSA原理：" class="headerlink" title="RSA原理："></a>RSA原理：</h3><p>RSA算法基于一个十分简单的数论事实：将两个大素数相乘十分容易，但是想要对其乘积进行因式分解却极其困难，因此可以将乘积公开作为加密密钥。</p>
+<h3 id="算法："><a href="#算法：" class="headerlink" title="算法："></a>算法：</h3><p>(1)选择两个不同的大素数p和q；<br>(2)计算乘积n=pq和Φ(n)=(p-1)(q-1)；<br>(3)选择大于1小于Φ(n)的随机整数e，使得gcd(e,Φ(n))=1；注：gcd即最大公约数。<br>(4)计算d使得d<em>e=1mod Φ(n)；注：即d</em>e mod Φ(n) =1。<br>(5)对每一个密钥k=(n,p,q,d,e)，定义加密变换为Ek(x)=xe mod n，解密变换为Dk(x)=yd mod n，这里x,y∈Zn；<br>(6)p,q销毁，以{e,n}为公开密钥，{d,n}为私有密钥。</p>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>假设p = 3、q = 11（p，q都是素数即可。），则N = pq = 33；<br>r =Φ(n)= (p-1)(q-1) = (3-1)(11-1) = 20；<br>根据gcd(e,Φ(n))=1，即gcd(e,20)=1，令e=3，则，d = 7（两个数交换一下也可以）<br>到这里，公钥和密钥已经确定。公钥为(N, e) = (33, 3)，密钥为(N, d) = (33, 7)</p>
+<h2 id="详细代码"><a href="#详细代码" class="headerlink" title="详细代码"></a>详细代码</h2><pre><code>#include&lt;stdio.h&gt;
+int rsa_en();
+int rsa_de();
+int calc();
+int main()
+{
+    char input; //接收a,b,c,z四种操作 
+    char asd; // 接收a,b两种操作 
+    int flag=1;//供循环使用 
+    while(flag){
+    printf(&quot;****************文本加解密软件*******************\n&quot;);
+    printf(&quot;*\t\t\t\t\t\t*\n&quot;);
+    printf(&quot;*\t请从下面菜单中选择你要进行的操作\t*\n&quot;);
+    printf(&quot;*\ta.文件加密\t\t\t\t*\n&quot;);
+    printf(&quot;*\tb.文件解密\t\t\t\t*\n&quot;);
+    printf(&quot;*\tc.生成密钥\t\t\t\t*\n&quot;);
+    printf(&quot;*\tz.退出程序\t\t\t\t*\n&quot;);
+    printf(&quot;*\t\t\t\t\t\t*\n&quot;);
+    printf(&quot;*************************************************\n&quot;);
+    fflush(stdin);
+    scanf(&quot;%c&quot;,&amp;input);
+    while(input!=&apos;\0&apos;){
+    fflush(stdin);
+    if(input==&apos;a&apos;)
+    {
+        rsa_en();
+    }
+    else if(input==&apos;b&apos;)
+        rsa_de();
+    else if(input==&apos;c&apos;)
+        calc();
+    else if(input==&apos;z&apos;)
+        {
+            printf(&quot;关闭程序&quot;);
+            return 0;
+        }
+    printf(&quot;\n接下来你希望：\na.继续当前操作\nb.回到主菜单\n&quot;);
+    fflush(stdin);
+    scanf(&quot;%c&quot;,&amp;asd);
+    if(asd==&apos;a&apos;)
+    continue; 
+    else
+    input=&apos;\0&apos;;
+    }    
+}
+} 
+//计算密钥
+int calc(){
+    long long p,q,n,e,t,d;
+    printf(&quot;please input the p,q: &quot;);
+    scanf(&quot;%lld %lld&quot;, &amp;p, &amp;q);
+    n = p*q;
+    printf(&quot;the n is %lld\n&quot;,n);
+    t = (p-1)*(q-1);
+    printf(&quot;the t is %lld\n&quot;,t);
+    printf(&quot;please input the e: &quot;);
+    scanf(&quot;%lld&quot;, &amp;e);
+    if(e &lt; 1 || e &gt; t){
+        printf(&quot;e is error,please input again: &quot;);
+        scanf(&quot;%lld&quot;, &amp;e);
+    }
+    d = 1;
+    while(((e*d)%t)!=1)
+    d++;
+    printf(&quot;then caculate out that the d is %lld\n&quot;,d);
+}
+//加密 
+int rsa_en(){
+    int m,n,d;
+    char buffer[200];
+    char plain[50];
+    char cipher[50];
+    int readCount,flag,M,i,c=1;
+    printf(&quot;please input the d,n: &quot;);
+    scanf(&quot;%d %d&quot;, &amp;d, &amp;n);
+    printf(&quot;please input the cipher text: &quot;);
+    scanf(&quot;%s&quot;,cipher);
+    printf(&quot;please input the plain text: &quot;);
+    scanf(&quot;%s&quot;,plain);
+    FILE *fp1=fopen(cipher,&quot;r&quot;);
+    FILE *fp2=fopen(plain,&quot;w&quot;);
+    while(!feof(fp1)){
+        fflush(stdin);
+        fgets(buffer,1024,fp1);
+        flag=0;
+        while(buffer[flag]!=&apos;\0&apos;){
+            c=1;
+            M=int(buffer[flag++]);
+            for(i=0;i&lt;d;i++){
+                c=c*M;
+                c=c%n;
+            }
+            fprintf(fp2,&quot;%03d&quot;,c);
+            }
+            if(!feof(fp1))
+            fprintf(fp2,&quot;\n&quot;);
+        }
 
-        
-        
+    fclose(fp1);
+    fclose(fp2);
+} 
+//解密
+int rsa_de(){
+    int m,n,e;
+    char buffer[200];
+    char plain[50];
+    char cipher[50];
+    char cal;
+    int readCount,flag,M,i,c=1;
+    printf(&quot;please input the e,n: &quot;);
+    scanf(&quot;%d %d&quot;, &amp;e, &amp;n);
+    printf(&quot;please input the plain text: &quot;);
+    scanf(&quot;%s&quot;,plain);
+    printf(&quot;please input the cipher text: &quot;);
+    scanf(&quot;%s&quot;,cipher);
+    FILE *fp1=fopen(plain,&quot;r&quot;);
+    FILE *fp2=fopen(cipher,&quot;w&quot;);
+    while(!feof(fp1)){
+        fflush(stdin);
+        fgets(buffer,1024,fp1);
+        flag=0;
+        while((buffer[flag]!=&apos;\n&apos;)&amp;&amp;(buffer[flag]!=&apos;\0&apos;)){
+            M=0;
+            c=1;
+            for(i=0;i&lt;3;i++){
+                if(buffer[flag]==&apos;\n&apos;)
+                continue;
+                M=(buffer[flag++]-48)+M*10;
+            }
+            for(i=0;i&lt;e;i++){
+                c=c*M;
+                c=c%n;
+            }
+            cal=char(c);
+            fprintf(fp2,&quot;%c&quot;,cal);
+            }
+        }
 
-        
+    fclose(fp1);
+    fclose(fp2);
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/03/29/密码学实验2—-Fixed-XORR/" itemprop="url">
-              
-                <span itemprop="name">密码学实验2_Fixed XORR</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-03-29T21:03:46+08:00" content="2019-03-29">
-          03-29
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+}
+</code></pre><h2 id="实验结果展示"><a href="#实验结果展示" class="headerlink" title="实验结果展示"></a>实验结果展示</h2><h3 id="1-给定p-q生成rsa公钥以及私钥"><a href="#1-给定p-q生成rsa公钥以及私钥" class="headerlink" title="1.给定p,q生成rsa公钥以及私钥"></a>1.给定p,q生成rsa公钥以及私钥</h3><p><img src="/picture/rsawenj/1.PNG" alt></p>
+<h3 id="2-利用公钥加密文件"><a href="#2-利用公钥加密文件" class="headerlink" title="2.利用公钥加密文件"></a>2.利用公钥加密文件</h3><p><img src="/picture/rsawenj/2.PNG" alt></p>
+<h3 id="3-利用私钥解密文件"><a href="#3-利用私钥解密文件" class="headerlink" title="3.利用私钥解密文件"></a>3.利用私钥解密文件</h3><p><img src="/picture/rsawenj/3.PNG" alt></p>
+<h3 id="4-文件展示"><a href="#4-文件展示" class="headerlink" title="4.文件展示"></a>4.文件展示</h3><p><img src="/picture/rsawenj/4.PNG" alt></p>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/03/29/密码学实验1-Convert-hex-to-base64/" itemprop="url">
-              
-                <span itemprop="name">密码学实验1_Convert hex to base64 </span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-03-29T20:48:55+08:00" content="2019-03-29">
-          03-29
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/03/29/My-first-Post/" itemprop="url">
-              
-                <span itemprop="name">My first Post</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-03-29T20:05:53+08:00" content="2019-03-29">
-          03-29
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+    
+    <div>
+     
+       <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">------ 本文结束------</div>
+    
+</div>
+     
+     </div>
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Leng
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/2019/06/02/RSA文件加解密/" title="RSA文件加解密">http://yoursite.com/2019/06/02/RSA文件加解密/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://lengsen.github.io/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+  
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RSA/" rel="tag"><i class="fa fa-tag"></i>RSA</a>
+          
+            <a href="/tags/加密/" rel="tag"><i class="fa fa-tag"></i>加密</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/30/异或软件加密程序/" rel="next" title="异或软件加密程序">
+                <i class="fa fa-chevron-left"></i> 异或软件加密程序
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -481,6 +603,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -501,8 +627,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -560,6 +695,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#RSA文件加解密"><span class="nav-number">1.</span> <span class="nav-text">RSA文件加解密</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RSA简介"><span class="nav-number">1.1.</span> <span class="nav-text">RSA简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验环境"><span class="nav-number">1.2.</span> <span class="nav-text">实验环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验目的"><span class="nav-number">1.3.</span> <span class="nav-text">实验目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验步骤分析"><span class="nav-number">1.4.</span> <span class="nav-text">实验步骤分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RSA原理："><span class="nav-number">1.4.1.</span> <span class="nav-text">RSA原理：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法："><span class="nav-number">1.4.2.</span> <span class="nav-text">算法：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例"><span class="nav-number">1.4.3.</span> <span class="nav-text">实例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#详细代码"><span class="nav-number">1.5.</span> <span class="nav-text">详细代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验结果展示"><span class="nav-number">1.6.</span> <span class="nav-text">实验结果展示</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-给定p-q生成rsa公钥以及私钥"><span class="nav-number">1.6.1.</span> <span class="nav-text">1.给定p,q生成rsa公钥以及私钥</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-利用公钥加密文件"><span class="nav-number">1.6.2.</span> <span class="nav-text">2.利用公钥加密文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-利用私钥解密文件"><span class="nav-number">1.6.3.</span> <span class="nav-text">3.利用私钥解密文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-文件展示"><span class="nav-number">1.6.4.</span> <span class="nav-text">4.文件展示</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -707,6 +858,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
