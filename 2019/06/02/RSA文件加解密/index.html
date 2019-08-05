@@ -8,6 +8,16 @@
 <html class="theme-next gemini use-motion" lang="zh-Hans">
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误');
+                history.back();
+            }
+        }
+    })();
+</script>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#222">
@@ -100,7 +110,7 @@
 <meta property="og:image" content="http://yoursite.com/picture/rsawenj/2.PNG">
 <meta property="og:image" content="http://yoursite.com/picture/rsawenj/3.PNG">
 <meta property="og:image" content="http://yoursite.com/picture/rsawenj/4.PNG">
-<meta property="og:updated_time" content="2019-06-02T10:49:15.269Z">
+<meta property="og:updated_time" content="2019-08-02T13:56:10.281Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RSA文件加解密">
 <meta name="twitter:description" content="RSA文件加解密RSA简介RSA加密是一种非对称加密。可以在不直接传递密钥的情况下，完成解密。这能够确保信息的安全性，避免了直接传递密钥所造成的被破解的风险。是由一对密钥来进行加解密的过程，分别称为公钥和私钥。两者之间有数学相关，该加密算法的原理就是对一极大整数做因数分解的困难性来保证安全性。通常个人保存私钥，公钥是公开的（可能同时多人持有）。 实验环境windows10DEV C++ 实验目的通">
@@ -577,6 +587,10 @@ int rsa_de(){
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2019/08/05/test/" rel="prev" title="test">
+                test <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -652,7 +666,7 @@ int rsa_de(){
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
